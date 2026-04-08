@@ -2,10 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ProdutosApiService } from '../../services/produtos-api.service';
-import { NotaFiscal } from './notas-model';
+import { ItemNotaInput, NotaFiscal } from './notas-model';
 import { Produto } from '../produtos/protudos-model';
 import { NotasApiService } from '../../services/notas-api.service';
-import { Subject, Subscription, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
 	selector: 'app-notas-page',
@@ -13,15 +13,13 @@ import { Subject, Subscription, takeUntil } from 'rxjs';
 	templateUrl: './notas-page.component.html',
 })
 export class NotasPageComponent implements OnInit, OnDestroy {
-
 	private subs = new Subject<void>();
-
 	private readonly notasApi = inject(NotasApiService);
 	private readonly produtosApi = inject(ProdutosApiService);
 
 	produtos: Produto[] = [];
 	notas: NotaFiscal[] = [];
-	itensNovaNota: Array<{ produtoId: number; descricaoProduto: string; quantidade: number }> = [];
+	itensNovaNota: ItemNotaInput[] = [];
 
 	produtoSelecionadoId: number | null = null;
 	quantidade = 1;
@@ -38,14 +36,10 @@ export class NotasPageComponent implements OnInit, OnDestroy {
 	}
 
 	adicionarItem(): void {
-		if (!this.produtoSelecionadoId || this.quantidade <= 0) {
-			return;
-		}
+		if (!this.produtoSelecionadoId || this.quantidade <= 0) return;
 
 		const produto = this.produtos.find((p) => p.id === this.produtoSelecionadoId);
-		if (!produto) {
-			return;
-		}
+		if (!produto) return;
 
 		this.itensNovaNota.push({
 			produtoId: produto.id,
@@ -63,20 +57,23 @@ export class NotasPageComponent implements OnInit, OnDestroy {
 
 	criarNota(): void {
 		this.erro = '';
-		this.notasApi.criar({ itens: this.itensNovaNota }).pipe(takeUntil(this.subs)).subscribe({
-			next: () => {
-				this.itensNovaNota = [];
-				this.carregarNotas();
-			},
-			error: (err) => {
-				this.erro = err?.error?.title ?? err?.error ?? 'Falha ao criar nota fiscal.';
-			}
-		});
+		this.notasApi.criar({ itens: this.itensNovaNota })
+			.pipe(takeUntil(this.subs))
+			.subscribe({
+				next: () => {
+					this.itensNovaNota = [];
+					this.carregarNotas();
+				},
+				error: (err) => {
+					this.erro = err?.error?.title ?? err?.error ?? 'Falha ao criar nota fiscal.';
+				}
+			});
 	}
 
 	imprimir(notaId: number): void {
 		this.erro = '';
 		this.imprimindoId = notaId;
+		// A geração da UUID está sendo feita aqui no frontend para garantir a idempotência da requisição, evitando impressões duplicadas caso o usuário clique mais de uma vez ou haja instabilidade na rede.
 		const idempotencyKey = crypto.randomUUID();
 
 		this.notasApi.imprimir(notaId, idempotencyKey).pipe(takeUntil(this.subs)).subscribe({
