@@ -41,7 +41,6 @@ public sealed class ProdutosController(EstoqueDbContext dbContext) : ControllerB
 	public async Task<ActionResult<Produto>> ObterPorIdAsync([FromRoute] int id)
 	{
 		var produto = await dbContext.Produtos.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
-
 		return produto is null ? NotFound() : Ok(produto);
 	}
 
@@ -49,7 +48,6 @@ public sealed class ProdutosController(EstoqueDbContext dbContext) : ControllerB
 	public async Task<ActionResult<Produto>> AtualizarAsync([FromRoute] int id, [FromBody] AtualizarProdutoRequest request)
 	{
 		var produto = await dbContext.Produtos.FirstOrDefaultAsync(p => p.Id == id);
-
 		if (produto is null)
 		{
 			return NotFound();
@@ -60,7 +58,6 @@ public sealed class ProdutosController(EstoqueDbContext dbContext) : ControllerB
 		produto.Saldo = request.Saldo;
 
 		await dbContext.SaveChangesAsync();
-
 		return Ok(produto);
 	}
 }

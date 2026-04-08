@@ -1,15 +1,16 @@
-import { Component, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, effect, inject, OnDestroy, signal } from '@angular/core';
 import { IErrosPadroes } from '../../../services/base/base-api.model';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
 import { ProdutosApiService } from '../../../services/produtos-api.service';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-produtos-editar',
   templateUrl: './produtos-editar.html',
   styleUrl: './produtos-editar.scss',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
 })
 export class ProdutosEditar implements OnDestroy {
   private subs = new Subject<void>();

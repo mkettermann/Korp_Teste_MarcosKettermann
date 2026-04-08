@@ -4,12 +4,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProdutosApiService } from '../../../services/produtos-api.service';
 import { Subject, takeUntil } from 'rxjs';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-produtos-novo',
   templateUrl: './produtos-novo.html',
   styleUrl: './produtos-novo.scss',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
 })
 export class ProdutosNovo implements OnInit, OnDestroy {
   private subs = new Subject<void>();
