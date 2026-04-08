@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, effect, inject, signal } from '@angular/core';
 import { ProdutosApiService } from '../../services/produtos-api.service';
 import { Produto } from './protudos-model';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, delay } from 'rxjs';
 import { IErrosPadroes } from '../../services/base/base-api.model';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
@@ -18,6 +18,7 @@ export class ProdutosPageComponent implements OnInit, OnDestroy {
 
 	erro = signal<IErrosPadroes | null>(null);
 	produtos = signal<Produto[]>([]);
+	listagemCarregando = signal(false);
 
 	constructor() {
 		effect(() => {
@@ -36,10 +37,19 @@ export class ProdutosPageComponent implements OnInit, OnDestroy {
 	}
 
 	private recarregar(): void {
-		this.produtosApi.listar().pipe(takeUntil(this.subs)).subscribe({
-			next: (dados) => this.produtos.set(dados),
-			error: () => this.erro.set({ mensagem: 'Falha ao carregar produtos.', erros: null })
-		});
+		this.listagemCarregando.set(true);
+		this.produtosApi.listar().pipe(
+			// delay(3000),
+			takeUntil(this.subs)).subscribe({
+				next: (dados) => {
+					this.produtos.set(dados);
+					this.listagemCarregando.set(false);
+				},
+				error: () => {
+					this.erro.set({ mensagem: 'Falha ao carregar produtos.', erros: null });
+					this.listagemCarregando.set(false);
+				}
+			});
 	}
 
 	editandoProduto(produto: Produto) {
