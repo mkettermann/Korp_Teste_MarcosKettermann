@@ -3,13 +3,13 @@ import { ProdutosApiService } from '../../services/produtos-api.service';
 import { Produto } from './protudos-model';
 import { Subject, takeUntil } from 'rxjs';
 import { IErrosPadroes } from '../../services/base/base-api.model';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 @Component({
 	selector: 'app-produtos-page',
-	imports: [RouterOutlet],
 	templateUrl: './produtos-page.component.html',
-	styleUrl: './produtos-page.component.scss'
+	styleUrl: './produtos-page.component.scss',
+	imports: [RouterOutlet, RouterLink, RouterLinkActive],
 })
 export class ProdutosPageComponent implements OnInit, OnDestroy {
 	private subs = new Subject<void>();

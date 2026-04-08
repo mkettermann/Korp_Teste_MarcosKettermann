@@ -18,6 +18,13 @@ body {
 	gap: 0.5rem;
 }
 
+.actions {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 1.3rem;
+}
+
 .grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -76,8 +83,12 @@ a {
   font-weight: 600;
   padding: 0.35rem 0.7rem;
   border-radius: 8px;
+	outline: 1px solid hsla(224, 76%, 48%, 0.07);
+	transition: background 0.2s, outline 0.2s;
 }
 
 a.active {
+	transition: background 0.2s, outline 0.2s;
   background: #dbeafe;
+	outline: none;
 }

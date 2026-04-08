@@ -1,9 +1,14 @@
 <section class="panel">
 	<div class="panel-title">
 		Produtos
-		<i class="bi bi-box-seam"></i>
+		<div class="actions">
+			<a routerLink="/produtos/novo" routerLinkActive="active">
+				<i class="bi bi-plus"></i>
+				Novo
+			</a>
+			<i class="bi bi-box-seam"></i>
+		</div>
 	</div>
-	<hr>
 
 	<router-outlet></router-outlet>
 
@@ -16,25 +21,32 @@
 	<table>
 		<thead>
 			<tr>
-				<th>ID</th>
+				<!-- <th>ID</th> -->
 				<th>Código</th>
 				<th>Descrição</th>
 				<th>Saldo</th>
+				<th class="col-action">Ações</th>
 			</tr>
 		</thead>
 		<tbody>
 			@for (produto of produtos(); track $index) {
 			<tr>
-				<td>{{ produto.id }}</td>
+				<!-- <td>{{ produto.id }}</td> -->
 				<td>{{ produto.codigo }}</td>
 				<td>{{ produto.descricao }}</td>
 				<td>{{ produto.saldo }}</td>
+				<td>
+					<a routerLink="/produtos/editar/{{ produto.id }}" routerLinkActive="active">
+						<i class="bi bi-pencil"></i>
+						Editar
+					</a>
+				</td>
 			</tr>
 			}
 		</tbody>
 		<tfoot>
 			<tr>
-				<td colspan="4">Total de produtos: {{ produtos().length }}</td>
+				<td colspan="5" class="text-right">Total de produtos: {{ produtos().length }}</td>
 			</tr>
 		</tfoot>
 	</table>
