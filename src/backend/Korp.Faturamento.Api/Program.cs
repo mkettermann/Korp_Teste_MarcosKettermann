@@ -1,0 +1,42 @@
+using Korp.Faturamento.Api.Data;
+using Korp.Faturamento.Api.Services;
+using Microsoft.EntityFrameworkCore;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+
+builder.Services.AddControllers();
+builder.Services.AddDbContext<FaturamentoDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("FaturamentoDb")));
+builder.Services.AddScoped<PdfService>();
+builder.Services.AddHttpClient<EstoqueClient>(httpClient =>
+{
+    httpClient.BaseAddress = new Uri(builder.Configuration["Services:EstoqueBaseUrl"]
+        ?? "http://localhost:5101/");
+    httpClient.Timeout = TimeSpan.FromSeconds(5);
+});
+// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddOpenApi();
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+}
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<FaturamentoDbContext>();
+    db.Database.Migrate();
+}
+
+app.Run();
