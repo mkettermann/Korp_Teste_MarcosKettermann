@@ -7,66 +7,8 @@ import { NotaFiscal, Produto } from '../../core/models';
 
 @Component({
 	selector: 'app-notas-page',
-	standalone: true,
 	imports: [CommonModule, FormsModule],
-	template: `
-    <section class="panel">
-      <h2>Cadastro de Nota Fiscal</h2>
-      <form class="grid" (ngSubmit)="adicionarItem()">
-        <label>
-          Produto
-          <select name="produto" [(ngModel)]="produtoSelecionadoId" required>
-            <option [ngValue]="null">Selecione...</option>
-            <option *ngFor="let p of produtos" [ngValue]="p.id">{{ p.codigo }} - {{ p.descricao }} (saldo {{ p.saldo }})</option>
-          </select>
-        </label>
-        <label>
-          Quantidade
-          <input name="quantidade" [(ngModel)]="quantidade" type="number" min="1" required />
-        </label>
-        <button type="submit">Adicionar item</button>
-      </form>
-
-      <table>
-        <thead>
-          <tr><th>Produto</th><th>Quantidade</th></tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of itensNovaNota; let idx = index">
-            <td>{{ item.descricaoProduto }}</td>
-            <td>{{ item.quantidade }}</td>
-            <td><button type="button" (click)="removerItem(idx)">Remover</button></td>
-          </tr>
-        </tbody>
-      </table>
-
-      <button [disabled]="itensNovaNota.length === 0" (click)="criarNota()">Criar Nota (status Aberta)</button>
-      <p class="error" *ngIf="erro">{{ erro }}</p>
-    </section>
-
-    <section class="panel">
-      <h3>Notas Fiscais</h3>
-      <table>
-        <thead>
-          <tr><th>Número</th><th>Status</th><th>Itens</th><th>Ações</th></tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let nota of notas">
-            <td>{{ nota.numeroSequencial }}</td>
-            <td>{{ nota.status }}</td>
-            <td>{{ nota.itens.length }}</td>
-            <td>
-              <button
-                [disabled]="nota.status !== 'Aberta' || imprimindoId === nota.id"
-                (click)="imprimir(nota.id)">
-                {{ imprimindoId === nota.id ? 'Processando...' : 'Imprimir' }}
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-  `
+	templateUrl: './notas-page.component.html',
 })
 export class NotasPageComponent implements OnInit {
 	private readonly notasApi = inject(NotasApiService);
