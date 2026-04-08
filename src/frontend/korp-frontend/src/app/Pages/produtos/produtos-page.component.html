@@ -41,12 +41,19 @@
 				<td>{{ produto.codigo }}</td>
 				<td>{{ produto.descricao }}</td>
 				<td>{{ produto.saldo }}</td>
-				<td>
-					<a routerLink="/produtos/editar/{{ produto.id }}" routerLinkActive="active"
-						(click)="editandoProduto(produto)">
-						<i class="bi bi-pencil"></i>
-						Editar
-					</a>
+				<td class="col-action">
+					<div class="flex text-center gap-2">
+						<a routerLink="/produtos/editar/{{ produto.id }}" routerLinkActive="active"
+							(click)="editandoProduto(produto)">
+							<i class="bi bi-pencil"></i>
+							Editar
+						</a>
+						<a routerLink="/produtos/excluir/{{ produto.id }}" routerLinkActive="active"
+							(click)="excluindoProduto(produto)" class="text-danger">
+							<i class="bi bi-trash"></i>
+							Excluir
+						</a>
+					</div>
 				</td>
 			</tr>
 			}

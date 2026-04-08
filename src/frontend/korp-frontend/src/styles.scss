@@ -32,6 +32,10 @@ body {
 	margin-bottom: 1rem;
 }
 
+form.grid{
+	align-items: end;
+}
+
 label {
 	display: grid;
 	gap: 0.35rem;
@@ -40,9 +44,14 @@ label {
 
 input,
 select,
-button {
+button,
+.description {
 	padding: 0.55rem;
 	border-radius: 8px;
+	height: 41px;
+}
+input,
+select{
 	border: 1px solid #cbd5e1;
 }
 
@@ -69,6 +78,9 @@ td {
 	border-bottom: 1px solid #e2e8f0;
 	padding: 0.6rem;
 	text-align: left;
+}
+td.col-action{
+	padding: 0rem;
 }
 
 .error {
@@ -111,4 +123,23 @@ h3 {
 }
 .text-left{
 	text-align: left;
+}
+.text-danger{
+	color: #b91c1c;
+}
+.bg-danger{
+	background-color: #b91c1c;
+	color: #fff;
+}
+.flex{
+	display: flex;
+}
+.gap-1{
+	gap: 0.25rem;
+}
+.gap-2{
+	gap: 0.5rem;
+}
+.gap-3{
+	gap: 0.75rem;
 }

@@ -53,6 +53,9 @@ export class ProdutosPageComponent implements OnInit, OnDestroy {
 	}
 
 	editandoProduto(produto: Produto) {
-		this.produtosApi.editandoProduto.set(produto);
+		this.produtosApi.modificandoProduto.set(produto);
+	}
+	excluindoProduto(produto: Produto) {
+		this.produtosApi.modificandoProduto.set(produto);
 	}
 }

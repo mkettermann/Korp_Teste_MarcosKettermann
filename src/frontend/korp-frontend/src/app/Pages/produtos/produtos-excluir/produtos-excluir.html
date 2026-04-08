@@ -1,0 +1,30 @@
+<hr>
+
+<h3>Confirma a exclusão do Produto?</h3>
+<form class="grid" (ngSubmit)="excluirProduto()">
+	<label>
+		Código
+		<div class="description">
+			{{ codigo() }}
+		</div>
+	</label>
+	<label>
+		Descrição
+		<div class="description">
+			{{ descricao() }}
+		</div>
+	</label>
+	<label>
+		Saldo (Disponível em estoque)
+		<div class="description">
+			{{ saldo() }}
+		</div>
+	</label>
+	<button type="submit" class="bg-danger">
+		<i class="bi bi-trash"></i>
+		Excluir Produto
+	</button>
+</form>
+@if(erro()){
+<p class="error">{{ erro()?.mensagem ?? 'Erro desconhecido' }}</p>
+}

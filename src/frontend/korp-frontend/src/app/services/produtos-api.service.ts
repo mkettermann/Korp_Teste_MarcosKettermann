@@ -7,7 +7,7 @@ import { BaseApiService } from './base/base-api.service';
 export class ProdutosApiService extends BaseApiService {
 
 	public controleReloadListagem = signal(false);
-	editandoProduto = signal<Produto | null>(null);
+	modificandoProduto = signal<Produto | null>(null);
 
 	listar(): Observable<Produto[]> {
 		return this.get<Produto>('produtos');
@@ -16,4 +16,13 @@ export class ProdutosApiService extends BaseApiService {
 	criar(payload: { codigo: string; descricao: string; saldo: number }): Observable<Produto> {
 		return this.post<Produto>('produtos', payload);
 	}
+
+	editar(payload: { codigo: string; descricao: string; saldo: number }): Observable<Produto> {
+		return this.put<Produto>(`produtos/${payload.codigo}`, payload);
+	}
+
+	excluir(payload: { codigo: string; descricao: string; saldo: number }): Observable<void> {
+		return this.delete(`produtos/${payload.codigo}`);
+	}
+
 }

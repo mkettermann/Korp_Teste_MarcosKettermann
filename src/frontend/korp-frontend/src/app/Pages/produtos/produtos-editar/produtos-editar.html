@@ -14,7 +14,7 @@
 		Saldo * (Disponível em estoque)
 		<input name="saldo" [(ngModel)]="saldo" type="number" min="0" required />
 	</label>
-	<button type="submit"><i class="bi bi-dropbox"></i> Atualizar Produto</button>
+	<button type="submit"><i class="bi bi-pencil"></i> Atualizar Produto</button>
 </form>
 @if(erro()){
 <p class="error">{{ erro()?.mensagem ?? 'Erro desconhecido' }}</p>
