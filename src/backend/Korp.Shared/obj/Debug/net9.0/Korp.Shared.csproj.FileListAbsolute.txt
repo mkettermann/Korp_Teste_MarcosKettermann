@@ -1,0 +1,12 @@
+C:\PROJETOS\Korp_Teste_MarcosKettermann\src\backend\Korp.Shared\bin\Debug\net9.0\Korp.Shared.deps.json
+C:\PROJETOS\Korp_Teste_MarcosKettermann\src\backend\Korp.Shared\bin\Debug\net9.0\Korp.Shared.dll
+C:\PROJETOS\Korp_Teste_MarcosKettermann\src\backend\Korp.Shared\bin\Debug\net9.0\Korp.Shared.pdb
+C:\PROJETOS\Korp_Teste_MarcosKettermann\src\backend\Korp.Shared\obj\Debug\net9.0\Korp.Shared.GeneratedMSBuildEditorConfig.editorconfig
+C:\PROJETOS\Korp_Teste_MarcosKettermann\src\backend\Korp.Shared\obj\Debug\net9.0\Korp.Shared.AssemblyInfoInputs.cache
+C:\PROJETOS\Korp_Teste_MarcosKettermann\src\backend\Korp.Shared\obj\Debug\net9.0\Korp.Shared.AssemblyInfo.cs
+C:\PROJETOS\Korp_Teste_MarcosKettermann\src\backend\Korp.Shared\obj\Debug\net9.0\Korp.Shared.csproj.CoreCompileInputs.cache
+C:\PROJETOS\Korp_Teste_MarcosKettermann\src\backend\Korp.Shared\obj\Debug\net9.0\Korp.Shared.sourcelink.json
+C:\PROJETOS\Korp_Teste_MarcosKettermann\src\backend\Korp.Shared\obj\Debug\net9.0\Korp.Shared.dll
+C:\PROJETOS\Korp_Teste_MarcosKettermann\src\backend\Korp.Shared\obj\Debug\net9.0\refint\Korp.Shared.dll
+C:\PROJETOS\Korp_Teste_MarcosKettermann\src\backend\Korp.Shared\obj\Debug\net9.0\Korp.Shared.pdb
+C:\PROJETOS\Korp_Teste_MarcosKettermann\src\backend\Korp.Shared\obj\Debug\net9.0\ref\Korp.Shared.dll
