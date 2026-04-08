@@ -9,36 +9,6 @@
   padding: 1.5rem;
 }
 
-header {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.25rem;
-}
-
-h1 {
-  margin: 0;
-}
-
-nav {
-  display: flex;
-  gap: 0.75rem;
-}
-
-a {
-  text-decoration: none;
-  color: #1d4ed8;
-  font-weight: 600;
-  padding: 0.35rem 0.7rem;
-  border-radius: 8px;
-}
-
-a.active {
-  background: #dbeafe;
-}
-
 .content {
   display: grid;
   gap: 1rem;

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ImpressaoNotaResponse, NotaFiscal, NotaFiscalCriarItem } from '../features/notas/notas-model';
+import { ImpressaoNotaResponse, NotaFiscal, NotaFiscalCriarItem } from '../Pages/notas/notas-model';
 import { BaseApiService } from './base/base-api.service';
 import { HttpHeaders } from '@angular/common/http';
 

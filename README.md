@@ -76,7 +76,7 @@ Faturamento:
 - GET /api/notas/{id}
 - POST /api/notas/{id}/imprimir (requer header Idempotency-Key)
 
-## Cenários técnicos obrigatórios
+## Cenários técnicos
 
 Falha entre microsserviços:
 - Se a baixa no estoque falhar durante a impressão, a nota permanece Aberta e a API retorna erro para o frontend.
