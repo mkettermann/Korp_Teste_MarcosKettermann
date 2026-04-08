@@ -32,6 +32,26 @@ yarn-error.log*
 **/obj/
 **/TestResults/
 
+# .NET / Visual Studio
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+
+# Publish output
+**/publish/
+
+# Rider / ReSharper
+_ReSharper*/
+*.DotSettings.user
+
 # Coverage and local tooling
 *.coverage
 *.trx
