@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ProdutosApiService } from '../../core/produtos-api.service';
-import { Produto } from '../../core/models';
+import { ProdutosApiService } from '../../services/produtos-api.service';
+import { Produto } from './protudos-model';
 
 @Component({
 	selector: 'app-produtos-page',

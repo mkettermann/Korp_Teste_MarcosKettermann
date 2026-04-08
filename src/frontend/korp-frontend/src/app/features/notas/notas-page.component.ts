@@ -1,16 +1,21 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NotasApiService } from '../../core/notas-api.service';
-import { ProdutosApiService } from '../../core/produtos-api.service';
-import { NotaFiscal, Produto } from '../../core/models';
+import { ProdutosApiService } from '../../services/produtos-api.service';
+import { NotaFiscal } from './notas-model';
+import { Produto } from '../produtos/protudos-model';
+import { NotasApiService } from '../../services/notas-api.service';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 
 @Component({
 	selector: 'app-notas-page',
 	imports: [CommonModule, FormsModule],
 	templateUrl: './notas-page.component.html',
 })
-export class NotasPageComponent implements OnInit {
+export class NotasPageComponent implements OnInit, OnDestroy {
+
+	private subs = new Subject<void>();
+
 	private readonly notasApi = inject(NotasApiService);
 	private readonly produtosApi = inject(ProdutosApiService);
 
@@ -26,6 +31,10 @@ export class NotasPageComponent implements OnInit {
 	ngOnInit(): void {
 		this.carregarProdutos();
 		this.carregarNotas();
+	}
+	ngOnDestroy(): void {
+		this.subs.next();
+		this.subs.complete();
 	}
 
 	adicionarItem(): void {
@@ -54,7 +63,7 @@ export class NotasPageComponent implements OnInit {
 
 	criarNota(): void {
 		this.erro = '';
-		this.notasApi.criar({ itens: this.itensNovaNota }).subscribe({
+		this.notasApi.criar({ itens: this.itensNovaNota }).pipe(takeUntil(this.subs)).subscribe({
 			next: () => {
 				this.itensNovaNota = [];
 				this.carregarNotas();
@@ -70,7 +79,7 @@ export class NotasPageComponent implements OnInit {
 		this.imprimindoId = notaId;
 		const idempotencyKey = crypto.randomUUID();
 
-		this.notasApi.imprimir(notaId, idempotencyKey).subscribe({
+		this.notasApi.imprimir(notaId, idempotencyKey).pipe(takeUntil(this.subs)).subscribe({
 			next: (response) => {
 				this.downloadPdf(response.pdfBase64, `nota-${response.numero}.pdf`);
 				this.carregarNotas();
@@ -86,14 +95,14 @@ export class NotasPageComponent implements OnInit {
 	}
 
 	private carregarProdutos(): void {
-		this.produtosApi.listar().subscribe({
+		this.produtosApi.listar().pipe(takeUntil(this.subs)).subscribe({
 			next: (dados) => (this.produtos = dados),
 			error: () => (this.erro = 'Falha ao carregar produtos.')
 		});
 	}
 
 	private carregarNotas(): void {
-		this.notasApi.listar().subscribe({
+		this.notasApi.listar().pipe(takeUntil(this.subs)).subscribe({
 			next: (dados) => (this.notas = dados),
 			error: () => (this.erro = 'Falha ao carregar notas fiscais.')
 		});
