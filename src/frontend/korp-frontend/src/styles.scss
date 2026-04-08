@@ -1,6 +1,7 @@
-* {
-	box-sizing: border-box;
-}
+// Booststrap Icons
+$bootstrap-icons-font-dir: "bootstrap-icons/font/fonts";
+@import "bootstrap-icons/font/bootstrap-icons";
+
 
 body {
 	margin: 0;
