@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { IErrosPadroes } from '../../../services/base/base-api.model';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -11,7 +11,7 @@ import { ProdutosApiService } from '../../../services/produtos-api.service';
   styleUrl: './produtos-editar.scss',
   imports: [CommonModule, FormsModule],
 })
-export class ProdutosEditar implements OnInit, OnDestroy {
+export class ProdutosEditar implements OnDestroy {
   private subs = new Subject<void>();
   private readonly produtosApi = inject(ProdutosApiService);
 
@@ -21,8 +21,15 @@ export class ProdutosEditar implements OnInit, OnDestroy {
   descricao = signal('');
   saldo = signal(0);
 
-  ngOnInit(): void {
-    // Aqui você pode carregar os dados do produto a ser editado, usando um serviço para buscar pelo ID
+  constructor() {
+    effect(() => {
+      const produto = this.produtosApi.editandoProduto();
+      if (produto) {
+        this.codigo.set(produto.codigo);
+        this.descricao.set(produto.descricao);
+        this.saldo.set(produto.saldo);
+      }
+    });
   }
   ngOnDestroy(): void {
     this.subs.next();

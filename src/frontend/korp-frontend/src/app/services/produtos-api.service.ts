@@ -1,5 +1,4 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Produto } from '../Pages/produtos/protudos-model';
 import { BaseApiService } from './base/base-api.service';
@@ -8,6 +7,7 @@ import { BaseApiService } from './base/base-api.service';
 export class ProdutosApiService extends BaseApiService {
 
 	public controleReloadListagem = signal(false);
+	editandoProduto = signal<Produto | null>(null);
 
 	listar(): Observable<Produto[]> {
 		return this.get<Produto>('produtos');

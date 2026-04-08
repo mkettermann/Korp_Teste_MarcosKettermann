@@ -12,6 +12,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 	imports: [RouterOutlet, RouterLink, RouterLinkActive],
 })
 export class ProdutosPageComponent implements OnInit, OnDestroy {
+
 	private subs = new Subject<void>();
 	private readonly produtosApi = inject(ProdutosApiService);
 
@@ -39,5 +40,9 @@ export class ProdutosPageComponent implements OnInit, OnDestroy {
 			next: (dados) => this.produtos.set(dados),
 			error: () => this.erro.set({ mensagem: 'Falha ao carregar produtos.', erros: null })
 		});
+	}
+
+	editandoProduto(produto: Produto) {
+		this.produtosApi.editandoProduto.set(produto);
 	}
 }

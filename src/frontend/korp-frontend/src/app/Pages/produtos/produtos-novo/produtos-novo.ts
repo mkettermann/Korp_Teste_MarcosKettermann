@@ -22,7 +22,9 @@ export class ProdutosNovo implements OnInit, OnDestroy {
   saldo = signal(0);
 
   ngOnInit(): void {
-    // Aqui você pode carregar os dados do produto a ser editado, usando um serviço para buscar pelo ID
+    this.codigo.set('');
+    this.descricao.set('');
+    this.saldo.set(0);
   }
   ngOnDestroy(): void {
     this.subs.next();

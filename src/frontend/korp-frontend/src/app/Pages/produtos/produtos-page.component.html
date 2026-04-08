@@ -36,7 +36,8 @@
 				<td>{{ produto.descricao }}</td>
 				<td>{{ produto.saldo }}</td>
 				<td>
-					<a routerLink="/produtos/editar/{{ produto.id }}" routerLinkActive="active">
+					<a routerLink="/produtos/editar/{{ produto.id }}" routerLinkActive="active"
+						(click)="editandoProduto(produto)">
 						<i class="bi bi-pencil"></i>
 						Editar
 					</a>
