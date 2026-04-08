@@ -17,12 +17,12 @@ export class ProdutosApiService extends BaseApiService {
 		return this.post<Produto>('produtos', payload);
 	}
 
-	editar(payload: { codigo: string; descricao: string; saldo: number }): Observable<Produto> {
-		return this.put<Produto>(`produtos/${payload.codigo}`, payload);
+	editar(id: number, payload: { codigo: string; descricao: string; saldo: number }): Observable<Produto> {
+		return this.put<Produto>(`produtos/${id}`, payload);
 	}
 
-	excluir(payload: { codigo: string; descricao: string; saldo: number }): Observable<void> {
-		return this.delete(`produtos/${payload.codigo}`);
+	excluir(id: number): Observable<void> {
+		return this.delete(`produtos/${id}`);
 	}
 
 }

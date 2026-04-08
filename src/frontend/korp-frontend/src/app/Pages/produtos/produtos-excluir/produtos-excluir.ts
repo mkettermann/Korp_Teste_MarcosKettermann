@@ -18,6 +18,7 @@ export class ProdutosExcluir implements OnDestroy {
 
   erro = signal<IErrosPadroes | null>(null);
 
+  id = signal(0);
   codigo = signal('');
   descricao = signal('');
   saldo = signal(0);
@@ -26,6 +27,7 @@ export class ProdutosExcluir implements OnDestroy {
     effect(() => {
       const produto = this.produtosApi.modificandoProduto();
       if (produto) {
+        this.id.set(produto.id);
         this.codigo.set(produto.codigo);
         this.descricao.set(produto.descricao);
         this.saldo.set(produto.saldo);
@@ -40,10 +42,11 @@ export class ProdutosExcluir implements OnDestroy {
   excluirProduto(): void {
     this.erro.set(null);
     this.produtosApi
-      .excluir({ codigo: this.codigo(), descricao: this.descricao(), saldo: this.saldo() })
+      .excluir(this.id())
       .pipe(takeUntil(this.subs))
       .subscribe({
         next: () => {
+          this.id.set(0);
           this.codigo.set('');
           this.descricao.set('');
           this.saldo.set(0);

@@ -18,6 +18,7 @@ export class ProdutosEditar implements OnDestroy {
 
   erro = signal<IErrosPadroes | null>(null);
 
+  id = signal(0);
   codigo = signal('');
   descricao = signal('');
   saldo = signal(0);
@@ -26,6 +27,7 @@ export class ProdutosEditar implements OnDestroy {
     effect(() => {
       const produto = this.produtosApi.modificandoProduto();
       if (produto) {
+        this.id.set(produto.id);
         this.codigo.set(produto.codigo);
         this.descricao.set(produto.descricao);
         this.saldo.set(produto.saldo);
@@ -40,17 +42,18 @@ export class ProdutosEditar implements OnDestroy {
   editarProduto(): void {
     this.erro.set(null);
     this.produtosApi
-      .criar({ codigo: this.codigo(), descricao: this.descricao(), saldo: this.saldo() })
+      .editar(this.id(), { codigo: this.codigo(), descricao: this.descricao(), saldo: this.saldo() })
       .pipe(takeUntil(this.subs))
       .subscribe({
         next: () => {
+          this.id.set(0);
           this.codigo.set('');
           this.descricao.set('');
           this.saldo.set(0);
 
           this.produtosApi.controleReloadListagem.set(true);
         },
-        error: (err) => this.erro.set(err?.error ?? { mensagem: 'Falha ao cadastrar produto.', erros: null })
+        error: (err) => this.erro.set(err?.error ?? { mensagem: 'Falha ao editar produto.', erros: null })
       });
   }
 }
