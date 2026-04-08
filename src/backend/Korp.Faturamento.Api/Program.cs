@@ -16,6 +16,15 @@ builder.Services.AddHttpClient<EstoqueClient>(httpClient =>
         ?? "http://localhost:5101/");
     httpClient.Timeout = TimeSpan.FromSeconds(5);
 });
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("frontend", policy =>
+    {
+        policy.AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowAnyOrigin();
+    });
+});
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
@@ -28,6 +37,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("frontend");
 
 app.UseAuthorization();
 

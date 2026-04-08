@@ -1,1 +1,66 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+}
+
+.panel {
+	background: #ffffff;
+	border-radius: 12px;
+	box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+	padding: 1rem;
+}
+
+.grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: 0.8rem;
+	margin-bottom: 1rem;
+}
+
+label {
+	display: grid;
+	gap: 0.35rem;
+	font-weight: 600;
+}
+
+input,
+select,
+button {
+	padding: 0.55rem;
+	border-radius: 8px;
+	border: 1px solid #cbd5e1;
+}
+
+button {
+	cursor: pointer;
+	background: #0ea5e9;
+	border: none;
+	color: #fff;
+	font-weight: 600;
+}
+
+button:disabled {
+	background: #94a3b8;
+	cursor: not-allowed;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+th,
+td {
+	border-bottom: 1px solid #e2e8f0;
+	padding: 0.6rem;
+	text-align: left;
+}
+
+.error {
+	color: #b91c1c;
+	font-weight: 700;
+}
 /* You can add global styles to this file, and also import other style files */
