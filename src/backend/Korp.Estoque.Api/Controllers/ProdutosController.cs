@@ -15,6 +15,7 @@ public sealed class ProdutosController(EstoqueDbContext dbContext) : ControllerB
 	{
 		var produtos = await dbContext.Produtos
 				.AsNoTracking()
+				.Where(p => p.Ativo)
 				.OrderBy(p => p.Id)
 				.ToListAsync();
 
@@ -24,10 +25,30 @@ public sealed class ProdutosController(EstoqueDbContext dbContext) : ControllerB
 	[HttpPost]
 	public async Task<ActionResult<Produto>> CriarAsync([FromBody] CriarProdutoRequest request)
 	{
+		var codigoNormalizado = request.Codigo.Trim();
+		var descricaoNormalizada = request.Descricao.Trim();
+
+		var produtoExistente = await dbContext.Produtos.FirstOrDefaultAsync(p => p.Codigo == codigoNormalizado);
+		if (produtoExistente is not null)
+		{
+			if (produtoExistente.Ativo)
+			{
+				return Conflict(new { Mensagem = "Já existe produto ativo com o código informado." });
+			}
+
+			produtoExistente.Descricao = descricaoNormalizada;
+			produtoExistente.Saldo = request.Saldo;
+			produtoExistente.Ativo = true;
+
+			await dbContext.SaveChangesAsync();
+			return Ok(produtoExistente);
+		}
+
 		var produto = new Produto
 		{
-			Codigo = request.Codigo.Trim(),
-			Descricao = request.Descricao.Trim(),
+			Codigo = codigoNormalizado,
+			Descricao = descricaoNormalizada,
+			Ativo = true,
 			Saldo = request.Saldo
 		};
 
@@ -40,7 +61,7 @@ public sealed class ProdutosController(EstoqueDbContext dbContext) : ControllerB
 	[HttpGet("{id:int}", Name = "ObterProdutoPorId")]
 	public async Task<ActionResult<Produto>> ObterPorIdAsync([FromRoute] int id)
 	{
-		var produto = await dbContext.Produtos.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
+		var produto = await dbContext.Produtos.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id && p.Ativo);
 		return produto is null ? NotFound() : Ok(produto);
 	}
 
@@ -56,9 +77,30 @@ public sealed class ProdutosController(EstoqueDbContext dbContext) : ControllerB
 		produto.Codigo = request.Codigo.Trim();
 		produto.Descricao = request.Descricao.Trim();
 		produto.Saldo = request.Saldo;
+		produto.Ativo = true;
 
 		await dbContext.SaveChangesAsync();
 		return Ok(produto);
+	}
+
+	[HttpDelete("{id:int}")]
+	public async Task<IActionResult> ExcluirAsync([FromRoute] int id)
+	{
+		var produto = await dbContext.Produtos.FirstOrDefaultAsync(p => p.Id == id);
+		if (produto is null)
+		{
+			return NotFound();
+		}
+
+		if (!produto.Ativo)
+		{
+			return NoContent();
+		}
+
+		produto.Ativo = false;
+		await dbContext.SaveChangesAsync();
+
+		return NoContent();
 	}
 }
 

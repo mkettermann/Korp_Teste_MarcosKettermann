@@ -15,6 +15,7 @@ public sealed class EstoqueDbContext(DbContextOptions<EstoqueDbContext> options)
 			entity.HasIndex(p => p.Codigo).IsUnique();
 			entity.Property(p => p.Codigo).HasMaxLength(40).IsRequired();
 			entity.Property(p => p.Descricao).HasMaxLength(200).IsRequired();
+			entity.Property(p => p.Ativo).HasDefaultValue(true).IsRequired();
 			entity.Property(p => p.VersaoConcorrencia)
 				.HasDefaultValue(0)
 				.IsConcurrencyToken();

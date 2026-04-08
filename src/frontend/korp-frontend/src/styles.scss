@@ -16,6 +16,17 @@ body {
 	align-items: center;
 	justify-content: space-between;
 	gap: 0.5rem;
+	background: linear-gradient(90deg,
+		hsl(199 100 50),
+		hsl(199 100 50),
+		transparent,
+		transparent,
+		transparent);
+	border-radius: 8px;
+	padding-left: 4px;
+}
+.panel-text{
+	color: hsl(199 100 100);
 }
 
 .actions {

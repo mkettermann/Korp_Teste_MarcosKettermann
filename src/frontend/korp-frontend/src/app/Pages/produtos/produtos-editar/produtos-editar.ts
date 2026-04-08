@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
 import { ProdutosApiService } from '../../../services/produtos-api.service';
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-produtos-editar',
@@ -15,6 +15,7 @@ import { RouterLink } from "@angular/router";
 export class ProdutosEditar implements OnDestroy {
   private subs = new Subject<void>();
   private readonly produtosApi = inject(ProdutosApiService);
+  private readonly router = inject(Router);
 
   erro = signal<IErrosPadroes | null>(null);
 
@@ -31,6 +32,9 @@ export class ProdutosEditar implements OnDestroy {
         this.codigo.set(produto.codigo);
         this.descricao.set(produto.descricao);
         this.saldo.set(produto.saldo);
+      } else {
+        console.log('⛓️‍💥 Redirecionando para listagem.');
+        this.router.navigate(['/produtos']);
       }
     });
   }
@@ -52,6 +56,7 @@ export class ProdutosEditar implements OnDestroy {
           this.saldo.set(0);
 
           this.produtosApi.controleReloadListagem.set(true);
+          this.router.navigate(['/produtos']);
         },
         error: (err) => this.erro.set(err?.error ?? { mensagem: 'Falha ao editar produto.', erros: null })
       });
