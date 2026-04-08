@@ -48,10 +48,10 @@ public sealed class NotasFiscaisController(
 		dbContext.NotasFiscais.Add(nota);
 		await dbContext.SaveChangesAsync();
 
-		return CreatedAtAction(nameof(ObterPorIdAsync), new { id = nota.Id }, nota);
+		return CreatedAtRoute("ObterNotaPorId", new { id = nota.Id }, nota);
 	}
 
-	[HttpGet("{id:int}")]
+	[HttpGet("{id:int}", Name = "ObterNotaPorId")]
 	public async Task<ActionResult<NotaFiscal>> ObterPorIdAsync([FromRoute] int id)
 	{
 		var nota = await dbContext.NotasFiscais

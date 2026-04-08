@@ -1,0 +1,19 @@
+<h3>Cadastro de Produtos</h3>
+<form class="grid" (ngSubmit)="criarProduto()">
+	<label>
+		Código *
+		<input name="codigo" [(ngModel)]="codigo" required />
+	</label>
+	<label>
+		Descrição *
+		<input name="descricao" [(ngModel)]="descricao" required />
+	</label>
+	<label>
+		Saldo * (Disponível em estoque)
+		<input name="saldo" [(ngModel)]="saldo" type="number" min="0" required />
+	</label>
+	<button type="submit"><i class="bi bi-dropbox"></i> Adicionar Produto</button>
+</form>
+@if(erro()){
+<p class="error">{{ erro()?.mensagem ?? 'Erro desconhecido' }}</p>
+}

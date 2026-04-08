@@ -34,10 +34,10 @@ public sealed class ProdutosController(EstoqueDbContext dbContext) : ControllerB
 		dbContext.Produtos.Add(produto);
 		await dbContext.SaveChangesAsync();
 
-		return CreatedAtAction(nameof(ObterPorIdAsync), new { id = produto.Id }, produto);
+		return CreatedAtRoute("ObterProdutoPorId", new { id = produto.Id }, produto);
 	}
 
-	[HttpGet("{id:int}")]
+	[HttpGet("{id:int}", Name = "ObterProdutoPorId")]
 	public async Task<ActionResult<Produto>> ObterPorIdAsync([FromRoute] int id)
 	{
 		var produto = await dbContext.Produtos.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
