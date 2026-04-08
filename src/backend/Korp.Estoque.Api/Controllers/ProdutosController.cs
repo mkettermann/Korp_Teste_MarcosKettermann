@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Korp.Estoque.Api.Data;
 using Korp.Estoque.Api.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -23,11 +24,6 @@ public sealed class ProdutosController(EstoqueDbContext dbContext) : ControllerB
 	[HttpPost]
 	public async Task<ActionResult<Produto>> CriarAsync([FromBody] CriarProdutoRequest request)
 	{
-		if (request.Saldo < 0)
-		{
-			return BadRequest("Saldo não pode ser negativo.");
-		}
-
 		var produto = new Produto
 		{
 			Codigo = request.Codigo.Trim(),
@@ -59,11 +55,6 @@ public sealed class ProdutosController(EstoqueDbContext dbContext) : ControllerB
 			return NotFound();
 		}
 
-		if (request.Saldo < 0)
-		{
-			return BadRequest("Saldo não pode ser negativo.");
-		}
-
 		produto.Codigo = request.Codigo.Trim();
 		produto.Descricao = request.Descricao.Trim();
 		produto.Saldo = request.Saldo;
@@ -74,5 +65,30 @@ public sealed class ProdutosController(EstoqueDbContext dbContext) : ControllerB
 	}
 }
 
-public sealed record CriarProdutoRequest(string Codigo, string Descricao, int Saldo);
-public sealed record AtualizarProdutoRequest(string Codigo, string Descricao, int Saldo);
+public sealed class CriarProdutoRequest
+{
+	[Required(ErrorMessage = "O campo Codigo é obrigatório.")]
+	[RegularExpression(@".*\S.*", ErrorMessage = "O campo Codigo é obrigatório.")]
+	public string Codigo { get; init; } = string.Empty;
+
+	[Required(ErrorMessage = "O campo Descricao é obrigatório.")]
+	[RegularExpression(@".*\S.*", ErrorMessage = "O campo Descricao é obrigatório.")]
+	public string Descricao { get; init; } = string.Empty;
+
+	[Range(0, int.MaxValue, ErrorMessage = "Saldo não pode ser negativo.")]
+	public int Saldo { get; init; }
+}
+
+public sealed class AtualizarProdutoRequest
+{
+	[Required(ErrorMessage = "O campo Codigo é obrigatório.")]
+	[RegularExpression(@".*\S.*", ErrorMessage = "O campo Codigo é obrigatório.")]
+	public string Codigo { get; init; } = string.Empty;
+
+	[Required(ErrorMessage = "O campo Descricao é obrigatório.")]
+	[RegularExpression(@".*\S.*", ErrorMessage = "O campo Descricao é obrigatório.")]
+	public string Descricao { get; init; } = string.Empty;
+
+	[Range(0, int.MaxValue, ErrorMessage = "Saldo não pode ser negativo.")]
+	public int Saldo { get; init; }
+}

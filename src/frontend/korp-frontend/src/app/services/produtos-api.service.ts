@@ -2,17 +2,16 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Produto } from '../Pages/produtos/protudos-model';
+import { BaseApiService } from './base/base-api.service';
 
 @Injectable({ providedIn: 'root' })
-export class ProdutosApiService {
-	private readonly http = inject(HttpClient);
-	private readonly baseUrl = 'http://localhost:5101/api/produtos';
+export class ProdutosApiService extends BaseApiService {
 
 	listar(): Observable<Produto[]> {
-		return this.http.get<Produto[]>(this.baseUrl);
+		return this.get<Produto>('produtos');
 	}
 
 	criar(payload: { codigo: string; descricao: string; saldo: number }): Observable<Produto> {
-		return this.http.post<Produto>(this.baseUrl, payload);
+		return this.post<Produto>('produtos', payload);
 	}
 }

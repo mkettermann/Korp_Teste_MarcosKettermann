@@ -2,24 +2,24 @@
 	<h1>Produtos</h1>
 	<hr>
 
-	<h2>Cadastro de Produtos</h2>
+	<h3>Cadastro de Produtos</h3>
 	<form class="grid" (ngSubmit)="criarProduto()">
 		<label>
-			Código
+			Código *
 			<input name="codigo" [(ngModel)]="codigo" required />
 		</label>
 		<label>
-			Descrição
+			Descrição *
 			<input name="descricao" [(ngModel)]="descricao" required />
 		</label>
 		<label>
-			Saldo
+			Saldo * (Disponível em estoque)
 			<input name="saldo" [(ngModel)]="saldo" type="number" min="0" required />
 		</label>
-		<button type="submit">Salvar Produto</button>
+		<button type="submit">Adicionar Produto</button>
 	</form>
-	@if(erro){
-	<p class="error">{{ erro }}</p>
+	@if(erro()){
+	<p class="error">{{ erro()?.mensagem ?? 'Erro desconhecido' }}</p>
 	}
 
 	<hr>
@@ -35,7 +35,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			@for (produto of produtos; track $index) {
+			@for (produto of produtos(); track $index) {
 			<tr>
 				<td>{{ produto.id }}</td>
 				<td>{{ produto.codigo }}</td>
@@ -44,5 +44,10 @@
 			</tr>
 			}
 		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="4">Total de produtos: {{ produtos().length }}</td>
+			</tr>
+		</tfoot>
 	</table>
 </section>

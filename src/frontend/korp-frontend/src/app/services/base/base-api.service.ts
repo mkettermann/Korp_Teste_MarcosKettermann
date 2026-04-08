@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class BaseApiService {
@@ -10,18 +10,25 @@ export class BaseApiService {
 	// REST API common methods
 
 	get<T>(url: string): Observable<T[]> {
-		return this.http.get<T[]>(`${this.baseUrl}/${url}`);
+		return this.http.get<T[]>(`${this.baseUrl}/${url}`)
+			.pipe(map((res) => {
+				console.log('GET', `${this.baseUrl}/${url}`, res);
+				return res;
+			}));
 	}
 
 	post<T>(url: string, payload: any, options?: { headers?: HttpHeaders }): Observable<T> {
+		console.log('POST', `${this.baseUrl}/${url}`, payload);
 		return this.http.post<T>(`${this.baseUrl}/${url}`, payload, options);
 	}
 
 	put<T>(url: string, payload: any, options?: { headers?: HttpHeaders }): Observable<T> {
+		console.log('PUT', `${this.baseUrl}/${url}`, payload);
 		return this.http.put<T>(`${this.baseUrl}/${url}`, payload, options);
 	}
 
 	delete<T>(url: string, options?: { headers?: HttpHeaders }): Observable<T> {
+		console.log('DELETE', `${this.baseUrl}/${url}`);
 		return this.http.delete<T>(`${this.baseUrl}/${url}`, options);
 	}
 

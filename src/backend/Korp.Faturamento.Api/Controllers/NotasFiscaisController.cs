@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using Korp.Faturamento.Api.Data;
 using Korp.Faturamento.Api.Entities;
@@ -30,16 +31,6 @@ public sealed class NotasFiscaisController(
 	[HttpPost]
 	public async Task<ActionResult<NotaFiscal>> CriarAsync([FromBody] CriarNotaRequest request)
 	{
-		if (request.Itens.Count == 0)
-		{
-			return BadRequest("A nota precisa ter pelo menos um item.");
-		}
-
-		if (request.Itens.Any(x => x.Quantidade <= 0))
-		{
-			return BadRequest("Todos os itens devem ter quantidade maior que zero.");
-		}
-
 		var proximoNumero = (await dbContext.NotasFiscais.MaxAsync(x => (int?)x.NumeroSequencial) ?? 0) + 1;
 
 		var nota = new NotaFiscal
@@ -160,8 +151,25 @@ public sealed class NotasFiscaisController(
 	}
 }
 
-public sealed record CriarNotaRequest(IReadOnlyCollection<CriarItemNotaRequest> Itens);
-public sealed record CriarItemNotaRequest(int ProdutoId, string DescricaoProduto, int Quantidade);
+public sealed class CriarNotaRequest
+{
+	[Required(ErrorMessage = "O campo Itens é obrigatório.")]
+	[MinLength(1, ErrorMessage = "A nota precisa ter pelo menos um item.")]
+	public IReadOnlyCollection<CriarItemNotaRequest> Itens { get; init; } = Array.Empty<CriarItemNotaRequest>();
+}
+
+public sealed class CriarItemNotaRequest
+{
+	[Range(1, int.MaxValue, ErrorMessage = "ProdutoId deve ser maior que zero.")]
+	public int ProdutoId { get; init; }
+
+	[Required(ErrorMessage = "O campo DescricaoProduto é obrigatório.")]
+	[RegularExpression(@".*\S.*", ErrorMessage = "O campo DescricaoProduto é obrigatório.")]
+	public string DescricaoProduto { get; init; } = string.Empty;
+
+	[Range(1, int.MaxValue, ErrorMessage = "Quantidade deve ser maior que zero.")]
+	public int Quantidade { get; init; }
+}
 
 public sealed class ImpressaoNotaResponse
 {
