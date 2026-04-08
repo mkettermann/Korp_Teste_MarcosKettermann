@@ -40,6 +40,7 @@ public sealed class EstoqueController(EstoqueDbContext dbContext) : ControllerBa
 				}
 
 				produto.Saldo -= item.Quantidade;
+				produto.VersaoConcorrencia++;
 			}
 
 			await dbContext.SaveChangesAsync();

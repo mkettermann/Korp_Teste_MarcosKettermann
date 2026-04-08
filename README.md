@@ -86,3 +86,39 @@ Concorrência:
 
 Idempotência:
 - Repetir impressão com a mesma chave Idempotency-Key retorna o resultado anterior sem duplicar efeitos.
+
+## Testes automatizados
+
+Frontend:
+
+```powershell
+cd src/frontend/korp-frontend
+ng test --watch=false
+```
+
+Backend:
+
+```powershell
+cd src/backend
+dotnet test Korp.Backend.sln
+```
+
+Cobertura atual dos testes backend:
+- Concorrência funcional de estoque (saldo 1 em duas baixas consecutivas).
+- Idempotência no endpoint de impressão.
+- Falha de integração Faturamento -> Estoque com retorno 503 e registro em outbox.
+
+## Simulação de falha entre microsserviços
+
+1. Inicie PostgreSQL e Faturamento.
+2. Garanta que o serviço de Estoque esteja parado.
+3. Execute:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\simular-falha-estoque.ps1 -NotaId 1
+```
+
+Resultado esperado:
+- Retorno HTTP 503 do Faturamento.
+- Nota permanece com status Aberta.
+- Evento de falha registrado em outbox no banco do Faturamento.

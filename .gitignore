@@ -26,3 +26,12 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# .NET build artifacts
+**/bin/
+**/obj/
+**/TestResults/
+
+# Coverage and local tooling
+*.coverage
+*.trx
