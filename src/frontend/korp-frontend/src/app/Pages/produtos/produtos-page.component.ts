@@ -9,6 +9,7 @@ import { Subject, takeUntil } from 'rxjs';
 	selector: 'app-produtos-page',
 	imports: [CommonModule, FormsModule],
 	templateUrl: './produtos-page.component.html',
+	styleUrl: './produtos-page.component.scss'
 })
 export class ProdutosPageComponent implements OnInit, OnDestroy {
 	private subs = new Subject<void>();

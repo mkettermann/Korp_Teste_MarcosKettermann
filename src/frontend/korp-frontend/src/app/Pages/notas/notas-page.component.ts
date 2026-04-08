@@ -11,6 +11,7 @@ import { Subject, takeUntil } from 'rxjs';
 	selector: 'app-notas-page',
 	imports: [CommonModule, FormsModule],
 	templateUrl: './notas-page.component.html',
+	styleUrl: './notas-page.component.scss'
 })
 export class NotasPageComponent implements OnInit, OnDestroy {
 	private subs = new Subject<void>();
