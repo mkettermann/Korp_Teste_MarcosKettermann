@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Produto } from '../Pages/produtos/protudos-model';
+import { Produto } from '../Pages/produtos/produtos-model';
 import { BaseApiService } from './base/base-api.service';
 
 @Injectable({ providedIn: 'root' })

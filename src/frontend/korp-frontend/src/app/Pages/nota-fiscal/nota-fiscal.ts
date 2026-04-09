@@ -3,7 +3,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { NotasApiService } from '../../services/notas-api.service';
 import { ProdutosApiService } from '../../services/produtos-api.service';
-import { Produto } from '../produtos/protudos-model';
+import { Produto } from '../produtos/produtos-model';
 import { ItemNotaInput, NotaFiscal } from './nota-fiscal.model';
 import { FormsModule } from '@angular/forms';
 

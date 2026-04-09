@@ -1,15 +1,15 @@
 using Korp.Faturamento.Api.Entities;
 using QuestPDF.Fluent;
-using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 
 namespace Korp.Faturamento.Api.Services;
 
 public sealed class PdfService
 {
+	QuestPDF.Settings.License = LicenseType.Community;
+	
 	public byte[] GerarNotaFiscal(NotaFiscal nota)
 	{
-		QuestPDF.Settings.License = LicenseType.Community;
 
 		return Document.Create(container =>
 		{

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, effect, inject, signal } from '@angular/core';
 import { ProdutosApiService } from '../../services/produtos-api.service';
-import { Produto } from './protudos-model';
+import { Produto } from './produtos-model';
 import { Subject, takeUntil, delay } from 'rxjs';
 import { IErrosPadroes } from '../../services/base/base-api.model';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
