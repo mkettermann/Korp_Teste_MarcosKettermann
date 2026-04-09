@@ -1,5 +1,5 @@
 :root{
-	--sys-h-cor: 200;
+	--sys-h-cor: 260;
 	--sys-primary: hsl(var(--sys-h-cor), 100%, 50%);
 	--sys-on-primary: hsl(0, 0%, 100%);
 	--sys-primary-15: hsl(var(--sys-h-cor), 100%, 50%, 0.15);
@@ -32,6 +32,7 @@ html.dark-theme {
 body {
 	margin: 0;
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	caret-color: var(--sys-primary);
 }
 
 .panel {
@@ -99,6 +100,10 @@ select{
 	border: 1px solid var(--sys-outline);
 }
 
+input:focus{
+	border-color: var(--sys-primary);
+}
+
 button {
 	cursor: pointer;
 	background: var(--sys-primary);
@@ -155,6 +160,11 @@ a:hover {
 	transition: background 0.2s;
 	background: var(--sys-primary-15);
 	color: var(--sys-primary);
+	outline: none;
+}
+
+a.text-danger {
+	color: var(--sys-error);
 	outline: none;
 }
 

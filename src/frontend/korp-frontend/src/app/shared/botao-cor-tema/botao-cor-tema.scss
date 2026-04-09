@@ -1,0 +1,12 @@
+input{
+	outline: none;
+	border: none;
+}
+div{
+	outline: 1px solid var(--sys-primary-15);
+	// padding: 0px 4px;
+	border-radius: 8px;
+}
+div i{
+	color: var(--sys-primary);
+}

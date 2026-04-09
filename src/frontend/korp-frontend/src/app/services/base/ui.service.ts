@@ -5,6 +5,7 @@ import { IThemeLightness } from './base-api.model';
 export class Ui {
 
   lightness = signal<IThemeLightness>('light');
+  hue = signal<number>(260);
 
 }
 

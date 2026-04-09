@@ -13,8 +13,13 @@ export class BotaoClaroEscuro implements OnInit {
   lightness = computed(() => { return this.ui.lightness(); });
 
   ngOnInit(): void {
-    document.querySelector("html")?.classList.add('light-theme');
-    document.querySelector("html")?.classList.remove('dark-theme');
+    if (sessionStorage.getItem('theme') === 'dark') {
+      document.querySelector("html")?.classList.add('dark-theme');
+      this.ui.lightness.set('dark');
+    } else {
+      document.querySelector("html")?.classList.add('light-theme');
+      this.ui.lightness.set('light');
+    }
   }
 
   setlightDark() {
@@ -23,10 +28,12 @@ export class BotaoClaroEscuro implements OnInit {
       this.ui.lightness.set('dark');
       document.querySelector("html")?.classList.add('dark-theme');
       document.querySelector("html")?.classList.remove('light-theme');
+      sessionStorage.setItem('theme', 'dark');
     } else {
       this.ui.lightness.set('light');
       document.querySelector("html")?.classList.add('light-theme');
       document.querySelector("html")?.classList.remove('dark-theme');
+      sessionStorage.setItem('theme', 'light');
     }
   }
 
