@@ -1,0 +1,23 @@
+<hr>
+<div class="flex f-s-b">
+	<h3>Cadastro de Produtos</h3>
+	<a routerLink="/produtos" class="flex f-a-c f-s-15"><i class="bi bi-x"></i></a>
+</div>
+<form class="grid" (ngSubmit)="criarProduto()">
+	<label>
+		Código *
+		<input name="codigo" [ngModel]="codigo()" (ngModelChange)="codigo.set($event)" required />
+	</label>
+	<label>
+		Descrição *
+		<input name="descricao" [ngModel]="descricao()" (ngModelChange)="descricao.set($event)" required />
+	</label>
+	<label>
+		Saldo * (Disponível em estoque)
+		<input name="saldo" [ngModel]="saldo()" (ngModelChange)="saldo.set($event)" type="number" min="0" required />
+	</label>
+	<button type="submit"><i class="bi bi-plus-circle"></i> Adicionar Produto</button>
+</form>
+@if(erro()){
+<p class="error">{{ erro()?.mensagem ?? 'Erro desconhecido' }}</p>
+}

@@ -1,0 +1,15 @@
+:host {  
+  min-height: 100vh;
+  color: var(--sys-on-background);
+  background: var(--sys-background-gradient);
+  display: block;
+}
+
+.layout {
+  padding: 1rem;
+}
+
+.content {
+  display: grid;
+  gap: 1rem;
+}

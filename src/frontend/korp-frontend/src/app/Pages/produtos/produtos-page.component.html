@@ -1,0 +1,71 @@
+<section class="panel">
+	<div class="panel-title">
+		<div class="panel-text">
+			Produtos
+		</div>
+		<div class="actions">
+			<a routerLink="/produtos/novo" routerLinkActive="active">
+				<i class="bi bi-plus"></i>
+				Novo
+			</a>
+			<i class="bi bi-box-seam"></i>
+		</div>
+	</div>
+
+	<router-outlet></router-outlet>
+
+	<hr>
+	@if(erro()){
+	<p class="error">{{ erro()?.mensagem ?? 'Erro desconhecido' }}</p>
+	}
+
+	<h3>Listagem dos Produtos</h3>
+	<table>
+		<thead>
+			<tr>
+				<th>Código</th>
+				<th>Descrição</th>
+				<th>Saldo</th>
+				<th class="col-ativo">Ativo</th>
+				<th class="col-action">Ações</th>
+			</tr>
+		</thead>
+		<tbody>
+			@if(listagemCarregando()){
+			<tr>
+				<td colspan="5" class="text-center">Carregando...</td>
+			</tr>
+			} @else {
+			@for (produto of produtos(); track produto.id) {
+			<tr>
+				<td [style.width.px]="100">{{ produto.codigo }}</td>
+				<td>{{ produto.descricao }}</td>
+				<td>{{ produto.saldo }}</td>
+				<td class="col-ativo">
+					<i class="bi {{ produto.ativo ? 'bi-check-circle text-success' : 'bi-x-lg text-danger' }}"></i>
+				</td>
+				<td class="col-action">
+					<div class="flex text-center gap-2">
+						<a routerLink="/produtos/editar/{{ produto.id }}" routerLinkActive="active"
+							(click)="produtosApi.modificandoProduto.set(produto)">
+							<i class="bi bi-pencil"></i>
+							Editar
+						</a>
+						<a routerLink="/produtos/excluir/{{ produto.id }}" routerLinkActive="active"
+							(click)="produtosApi.modificandoProduto.set(produto)" class="text-danger">
+							<i class="bi bi-trash"></i>
+							Excluir
+						</a>
+					</div>
+				</td>
+			</tr>
+			}
+			}
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="5" class="text-right">Total de produtos: {{ produtos().length }}</td>
+			</tr>
+		</tfoot>
+	</table>
+</section>
