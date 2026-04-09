@@ -10,8 +10,8 @@ export class ProdutosApiService extends BaseApiService {
 	public controleReloadListagem = signal(false);
 	modificandoProduto = signal<Produto | null>(null);
 
-	listar(): Observable<Produto[]> {
-		return this.get<Produto>('produtos');
+	listar(ativo?: boolean): Observable<Produto[]> {
+		return this.get<Produto>(`produtos${ativo ? '?ativo=true' : ''}`);
 	}
 
 	criar(payload: { codigo: string; descricao: string; saldo: number }): Observable<Produto> {

@@ -11,12 +11,16 @@ namespace Korp.Estoque.Api.Controllers;
 public sealed class ProdutosController(EstoqueDbContext dbContext) : ControllerBase
 {
 	[HttpGet]
-	public async Task<ActionResult<IReadOnlyCollection<Produto>>> ListarAsync()
+	public async Task<ActionResult<IReadOnlyCollection<Produto>>> ListarAsync([FromQuery] bool? ativo)
 	{
-		var produtos = await dbContext.Produtos
-				.AsNoTracking()
-				.OrderBy(p => p.Id)
-				.ToListAsync();
+		var produtosQuery = dbContext.Produtos.AsNoTracking().OrderBy(p => p.Id);
+
+		if (ativo.HasValue)
+		{
+			produtosQuery = produtosQuery.Where(p => p.Ativo == ativo.Value).OrderBy(p => p.Id);
+		}
+
+		var produtos = await produtosQuery.ToListAsync();
 
 		return Ok(produtos);
 	}

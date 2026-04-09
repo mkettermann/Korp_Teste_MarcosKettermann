@@ -8,6 +8,7 @@ export interface NotaFiscal {
 
 export interface ItemNotaInput {
 	produtoId: number;
+	codigoProduto: string;
 	descricaoProduto: string;
 	quantidade: number;
 }

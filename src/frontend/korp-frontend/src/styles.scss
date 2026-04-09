@@ -77,6 +77,7 @@ body {
 	min-height: 33px;
 }
 .panel-text{
+	padding: 1rem;
 	color: var(--sys-on-background);
 }
 
@@ -117,6 +118,7 @@ select{
 	border: 1px solid var(--sys-outline);
 }
 
+select:focus,
 input:focus{
 	border-color: var(--sys-primary);
 }
@@ -133,6 +135,12 @@ button:disabled {
 	cursor: not-allowed;
 	filter: grayscale(100%);
 	opacity: 0.7;
+}
+
+button:focus {
+	outline: 2px solid var(--sys-primary) !important;
+	outline-offset: 2px;
+	z-index: 2;
 }
 
 table {

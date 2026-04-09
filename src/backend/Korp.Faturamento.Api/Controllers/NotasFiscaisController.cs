@@ -49,7 +49,7 @@ public sealed class NotasFiscaisController(
 				ProdutoId = i.ProdutoId,
 				DescricaoProduto = i.DescricaoProduto,
 				Quantidade = i.Quantidade
-			}).ToList()
+			}).OrderBy(p => p.Id).ToList()
 		};
 
 		dbContext.NotasFiscais.Add(nota);

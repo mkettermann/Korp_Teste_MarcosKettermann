@@ -31,6 +31,8 @@ export class RotaNotaFiscal {
   erroListagemNotas = signal<string>('');
   imprimindoId = signal<number[]>([]);
 
+  recarregandoProdutos = signal(false);
+
   ngOnInit(): void {
     this.carregarProdutos();
     this.carregarNotas();
@@ -60,6 +62,7 @@ export class RotaNotaFiscal {
       ...itens,
       {
         produtoId: produto.id,
+        codigoProduto: produto.codigo,
         descricaoProduto: produto.descricao,
         quantidade: this.quantidadeInput(),
       }
@@ -133,10 +136,17 @@ export class RotaNotaFiscal {
     });
   }
 
-  private carregarProdutos(): void {
-    this.produtosApi.listar().pipe(takeUntil(this.subs)).subscribe({
-      next: (dados) => this.produtos.set(dados),
-      error: () => this.erroInclusaoProduto.set('Falha ao carregar produtos.')
+  protected carregarProdutos(): void {
+    this.recarregandoProdutos.set(true);
+    this.produtosApi.listar(true).pipe(takeUntil(this.subs)).subscribe({
+      next: (dados) => {
+        this.produtos.set(dados);
+        this.recarregandoProdutos.set(false);
+      },
+      error: () => {
+        this.erroInclusaoProduto.set('Falha ao carregar produtos.');
+        this.recarregandoProdutos.set(false);
+      }
     });
   }
 
