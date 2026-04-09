@@ -117,8 +117,8 @@ public sealed class NotasFiscaisController(
 		var baixa = await estoqueClient.BaixarEstoqueAsync(baixaRequest, cancellationToken);
 		if (!baixa.sucesso)
 		{
-			var statusCode = baixa.statusCode >= 400 && baixa.statusCode <= 599
-					? baixa.statusCode
+			var statusCode = (int)baixa.StatusCode >= 400 && (int)baixa.StatusCode <= 599
+					? (int)baixa.StatusCode
 					: StatusCodes.Status503ServiceUnavailable;
 			var falhaTransitoria = statusCode >= 500;
 
@@ -131,7 +131,7 @@ public sealed class NotasFiscaisController(
 					{
 						NotaId = nota.Id,
 						baixa.mensagem,
-						StatusCode = baixa.statusCode
+						StatusCode = baixa.StatusCode
 					})
 				});
 
@@ -139,9 +139,6 @@ public sealed class NotasFiscaisController(
 				return StatusCode(StatusCodes.Status503ServiceUnavailable,
 						new { mensagem = baixa.mensagem ?? "Falha ao comunicar com estoque. Tente novamente." });
 			}
-
-			return StatusCode(statusCode,
-					new { mensagem = baixa.mensagem ?? "Falha ao baixar estoque." });
 
 			await dbContext.SaveChangesAsync(cancellationToken);
 			return StatusCode(StatusCodes.Status503ServiceUnavailable,
