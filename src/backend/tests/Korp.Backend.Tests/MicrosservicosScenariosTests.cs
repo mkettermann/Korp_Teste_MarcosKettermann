@@ -57,12 +57,12 @@ public sealed class MicrosservicosScenariosTests
 		var segundaBaixa = await controller.ProcessarBaixaAsync(request);
 
 		var ok = Assert.IsType<OkObjectResult>(primeiraBaixa.Result);
-		var respostaOk = Assert.IsType<EstoqueBaixaResponse>(ok.Value);
-		Assert.True(respostaOk.Sucesso);
+		var respostaOk = Assert.IsType<NormalResponse>(ok.Value);
+		Assert.True(respostaOk.sucesso);
 
 		var conflito = Assert.IsType<ConflictObjectResult>(segundaBaixa.Result);
-		var respostaConflito = Assert.IsType<EstoqueBaixaResponse>(conflito.Value);
-		Assert.False(respostaConflito.Sucesso);
+		var respostaConflito = Assert.IsType<NormalResponse>(conflito.Value);
+		Assert.False(respostaConflito.sucesso);
 
 		var produtoFinal = await dbContext.Produtos.SingleAsync();
 		Assert.Equal(0, produtoFinal.Saldo);
@@ -98,7 +98,7 @@ public sealed class MicrosservicosScenariosTests
 		});
 		await dbContext.SaveChangesAsync();
 
-		var estoqueClient = CreateEstoqueClient(HttpStatusCode.OK, new EstoqueBaixaResponse { Sucesso = true });
+		var estoqueClient = CreateEstoqueClient(HttpStatusCode.OK, new NormalResponse { sucesso = true });
 		var controller = new NotasFiscaisController(dbContext, estoqueClient, new PdfService())
 		{
 			ControllerContext = new ControllerContext
@@ -149,7 +149,7 @@ public sealed class MicrosservicosScenariosTests
 
 		var estoqueClient = CreateEstoqueClient(
 				HttpStatusCode.ServiceUnavailable,
-				new EstoqueBaixaResponse { Sucesso = false, mensagem = "Estoque indisponivel" });
+				new NormalResponse { sucesso = false, mensagem = "Estoque indisponivel" });
 
 		var controller = new NotasFiscaisController(dbContext, estoqueClient, new PdfService())
 		{
@@ -172,7 +172,7 @@ public sealed class MicrosservicosScenariosTests
 		Assert.Equal(1, outboxCount);
 	}
 
-	private static EstoqueClient CreateEstoqueClient(HttpStatusCode statusCode, EstoqueBaixaResponse payload)
+	private static EstoqueClient CreateEstoqueClient(HttpStatusCode statusCode, NormalResponse payload)
 	{
 		var handler = new StubHttpMessageHandler(_ =>
 		{

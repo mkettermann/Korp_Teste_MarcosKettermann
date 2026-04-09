@@ -108,7 +108,7 @@ public sealed class NotasFiscaisController(
 		};
 
 		var baixa = await estoqueClient.BaixarEstoqueAsync(baixaRequest, cancellationToken);
-		if (!baixa.Sucesso)
+		if (!baixa.sucesso)
 		{
 			dbContext.OutboxMessages.Add(new OutboxMessage
 			{
@@ -116,14 +116,14 @@ public sealed class NotasFiscaisController(
 				Payload = JsonSerializer.Serialize(new
 				{
 					NotaId = nota.Id,
-					baixa.Mensagem,
-					StatusCode = baixa.StatusCode
+					baixa.mensagem,
+					StatusCode = baixa.statusCode
 				})
 			});
 
 			await dbContext.SaveChangesAsync(cancellationToken);
 			return StatusCode(StatusCodes.Status503ServiceUnavailable,
-					new { mensagem = baixa.Mensagem ?? "Falha ao comunicar com estoque. Tente novamente." });
+					new { mensagem = baixa.mensagem ?? "Falha ao comunicar com estoque. Tente novamente." });
 		}
 
 		nota.Status = NotaStatus.Fechada;

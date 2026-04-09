@@ -10,11 +10,11 @@ namespace Korp.Estoque.Api.Controllers;
 public sealed class EstoqueController(EstoqueDbContext dbContext) : ControllerBase
 {
 	[HttpPost("baixas")]
-	public async Task<ActionResult<EstoqueBaixaResponse>> ProcessarBaixaAsync([FromBody] EstoqueBaixaRequest request)
+	public async Task<ActionResult<NormalResponse>> ProcessarBaixaAsync([FromBody] EstoqueBaixaRequest request)
 	{
 		if (request.Itens.Count == 0)
 		{
-			return BadRequest(new EstoqueBaixaResponse { Sucesso = false, mensagem = "A nota deve conter ao menos um item." });
+			return BadRequest(new NormalResponse { sucesso = false, mensagem = "A nota deve conter ao menos um item." });
 		}
 
 		await using var tx = await dbContext.Database.BeginTransactionAsync();
@@ -25,18 +25,18 @@ public sealed class EstoqueController(EstoqueDbContext dbContext) : ControllerBa
 			{
 				if (item.Quantidade <= 0)
 				{
-					return BadRequest(new EstoqueBaixaResponse { Sucesso = false, mensagem = "Quantidade inválida para baixa." });
+					return BadRequest(new NormalResponse { sucesso = false, mensagem = "Quantidade inválida para baixa." });
 				}
 
 				var produto = await dbContext.Produtos.FirstOrDefaultAsync(p => p.Id == item.ProdutoId);
 				if (produto is null)
 				{
-					return NotFound(new EstoqueBaixaResponse { Sucesso = false, mensagem = $"Produto {item.ProdutoId} não encontrado." });
+					return NotFound(new NormalResponse { sucesso = false, mensagem = $"Produto {item.ProdutoId} não encontrado." });
 				}
 
 				if (produto.Saldo < item.Quantidade)
 				{
-					return Conflict(new EstoqueBaixaResponse { Sucesso = false, mensagem = $"Saldo insuficiente para o produto {produto.Codigo}." });
+					return Conflict(new NormalResponse { sucesso = false, mensagem = $"Saldo insuficiente para o produto {produto.Codigo}." });
 				}
 
 				produto.Saldo -= item.Quantidade;
@@ -46,14 +46,14 @@ public sealed class EstoqueController(EstoqueDbContext dbContext) : ControllerBa
 			await dbContext.SaveChangesAsync();
 			await tx.CommitAsync();
 
-			return Ok(new EstoqueBaixaResponse { Sucesso = true });
+			return Ok(new NormalResponse { sucesso = true });
 		}
 		catch (DbUpdateConcurrencyException)
 		{
 			await tx.RollbackAsync();
-			return Conflict(new EstoqueBaixaResponse
+			return Conflict(new NormalResponse
 			{
-				Sucesso = false,
+				sucesso = false,
 				mensagem = "Conflito de concorrência detectado. Refaça a operação."
 			});
 		}

@@ -15,7 +15,6 @@ public sealed class ProdutosController(EstoqueDbContext dbContext) : ControllerB
 	{
 		var produtos = await dbContext.Produtos
 				.AsNoTracking()
-				.Where(p => p.Ativo)
 				.OrderBy(p => p.Id)
 				.ToListAsync();
 
