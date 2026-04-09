@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Korp.Faturamento.Api.Entities;
 
 public sealed class ItemNotaFiscal
@@ -7,5 +9,6 @@ public sealed class ItemNotaFiscal
 	public int ProdutoId { get; set; }
 	public string DescricaoProduto { get; set; } = string.Empty;
 	public int Quantidade { get; set; }
+	[JsonIgnore]
 	public NotaFiscal NotaFiscal { get; set; } = null!;
 }

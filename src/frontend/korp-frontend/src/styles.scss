@@ -6,8 +6,10 @@
 	--sys-on-primary-15: hsl(0, 0%, 95%);
 	--sys-error: hsl(4, 77%, 59%);
 	--sys-on-error: hsl(0, 0%, 95%);
+	--sys-error-15: hsl(4, 77%, 59%, 0.15);
 	--sys-success: hsl(120, 53%, 56%);
 	--sys-on-success: hsl(0, 0%, 5%);
+	--sys-success-15: hsl(120, 53%, 56%, 0.15);
 	--sys-dark: hsl(210, 50%, 12%);
 	--sys-dark-15: hsl(210, 50%, 12%, 0.15);
 	--sys-dark-7: hsl(210, 50%, 12%, 0.07);
@@ -19,7 +21,13 @@ html.light-theme {
 	--sys-on-background: hsl(210, 50%, 10%);
 	--sys-background-gradient: linear-gradient(135deg, hsl(210, 40%, 98%), hsl(214, 30%, 91%));
 	--sys-outline: hsl(210, 40%, 92%);
-	--sys-on-outline: hsl(210, 40%, 17%);	
+	--sys-on-outline: hsl(210, 40%, 17%);
+	--sys-outline-15: hsl(210, 40%, 92%, 0.15);
+
+	select {
+		color: var(--sys-on-background);
+		background-color: var(--sys-background);
+	}
 }
 html.dark-theme {
 	color-scheme: dark;
@@ -27,8 +35,14 @@ html.dark-theme {
 	--sys-on-background: hsl(210, 50%, 100%);
 	--sys-background-gradient: linear-gradient(135deg, hsl(210, 31%, 20%), hsl(214, 30%, 18%));
 	--sys-outline: hsl(210, 30%, 20%);
-	--sys-on-outline: hsl(210, 50%, 100%);	
+	--sys-on-outline: hsl(210, 50%, 100%);
+	--sys-outline-15: hsl(210, 30%, 20%, 0.15);
 	--sys-primary: hsl(var(--sys-h-cor), 100%, 70%);
+	
+	select option {
+		color: var(--sys-on-background);
+		background-color: var(--sys-background);
+	}
 }
 
 body {
@@ -60,8 +74,10 @@ body {
 		transparent);
 	border-radius: 8px;
 	padding-left: 4px;
+	min-height: 33px;
 }
 .panel-text{
+	padding: 1rem;
 	color: var(--sys-on-background);
 }
 
@@ -102,6 +118,7 @@ select{
 	border: 1px solid var(--sys-outline);
 }
 
+select:focus,
 input:focus{
 	border-color: var(--sys-primary);
 }
@@ -118,6 +135,11 @@ button:disabled {
 	cursor: not-allowed;
 	filter: grayscale(100%);
 	opacity: 0.7;
+}
+
+button:focus {
+	outline: 2px solid var(--sys-primary) !important;
+	outline-offset: 2px;
 }
 
 table {
@@ -212,6 +234,18 @@ hr {
 .gap-3{
 	gap: 0.75rem;
 }
+.f-s-5{
+	font-size: 0.5rem;
+}
+.f-s-10{
+	font-size: 1rem;
+}
 .f-s-15{
 	font-size: 1.5rem;
+}
+.cursor-pointer{
+	cursor: pointer;
+}
+.f-1{
+	flex: 1;
 }

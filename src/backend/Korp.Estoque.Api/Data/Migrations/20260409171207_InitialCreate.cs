@@ -20,6 +20,7 @@ namespace Korp.Estoque.Api.Data.Migrations
                     Codigo = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: false),
                     Descricao = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     Saldo = table.Column<int>(type: "integer", nullable: false),
+                    Ativo = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
                     VersaoConcorrencia = table.Column<int>(type: "integer", nullable: false, defaultValue: 0)
                 },
                 constraints: table =>

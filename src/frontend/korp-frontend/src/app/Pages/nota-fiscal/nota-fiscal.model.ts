@@ -1,13 +1,14 @@
 export interface NotaFiscal {
 	id: number;
 	numeroSequencial: number;
-	status: 'Aberta' | 'Fechada';
+	status: NotaStatus;
 	criadaEmUtc: string;
 	itens: ItemNota[];
 }
 
 export interface ItemNotaInput {
 	produtoId: number;
+	codigoProduto: string;
 	descricaoProduto: string;
 	quantidade: number;
 }
@@ -25,4 +26,9 @@ export interface ImpressaoNotaResponse {
 	numero: number;
 	status: string;
 	pdfBase64: string;
+}
+
+export enum NotaStatus {
+	Aberta = 1,
+	Fechada = 2
 }

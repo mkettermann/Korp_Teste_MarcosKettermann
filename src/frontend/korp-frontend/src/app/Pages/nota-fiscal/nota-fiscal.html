@@ -4,85 +4,153 @@
 			Nota Fiscal
 		</div>
 		<div class="actions">
-			<a routerLink="/notas/novo" routerLinkActive="active">
-				<i class="bi bi-plus"></i>
-				Novo
-			</a>
 			<i class="bi bi-receipt"></i>
 		</div>
 	</div>
-
-	<form class="grid" (ngSubmit)="adicionarItem()">
-		<label>
-			Produto
-			<select name="produto" [(ngModel)]="produtoSelecionadoId" required>
-				<option [ngValue]="null">Selecione...</option>
-				@for (produto of produtos(); track $index) {
-				<option [ngValue]="produto.id">{{ produto.codigo }} - {{ produto.descricao }} (saldo {{ produto.saldo }})
-				</option>
-				}
-			</select>
-		</label>
-		<label>
-			Quantidade
-			<input name="quantidade" [(ngModel)]="quantidade" type="number" min="1" required />
-		</label>
-		<button type="submit">Adicionar item</button>
-	</form>
-	<router-outlet></router-outlet>
-
-	<table>
-		<thead>
-			<tr>
-				<th>Produto</th>
-				<th>Quantidade</th>
-			</tr>
-		</thead>
-		<tbody>
-			@for (item of itensNovaNota(); track $index; let indexDoItem = $index) {
-			<tr>
-				<td>{{ item.descricaoProduto }}</td>
-				<td>{{ item.quantidade }}</td>
-				<td><button type="button" (click)="removerItem(indexDoItem)">
-						Remover
-					</button></td>
-			</tr>
+	<hr>
+	@if(produtos().length === 0) {
+	<p class="text-danger">
+		Nenhum produto cadastrado. Cadastre produtos para gerar notas fiscais.
+	</p>
+	} @else {
+	<div class="gerar-notas-container">
+		<div class="gerar-notas-itens">
+			<h3>
+				Inclusão de Produtos
+				<button type="button" class="botao-reload" [class.reloading]="recarregandoProdutos()"
+					(click)="carregarProdutos()">
+					<i class="bi bi-arrow-clockwise"></i>
+				</button>
+			</h3>
+			<form class="grid" (ngSubmit)="adicionarItem()">
+				<label>
+					Produto *
+					<select name="produto" (ngModelChange)="produtoInputId.set($event)" [ngModel]="produtoInputId()" required>
+						<option [ngValue]="null">Selecione...</option>
+						@for (produto of produtos(); track $index) {
+						<option [ngValue]="produto.id">
+							{{ produto.codigo }} - {{ produto.descricao }} - Saldo: {{ produto.saldo }}
+						</option>
+						}
+					</select>
+				</label>
+				<label>
+					Quantidade *
+					<input name="quantidade" (ngModelChange)="quantidadeInput.set($event)" [ngModel]="quantidadeInput()"
+						type="number" min="1" required />
+				</label>
+				<button type="submit" [disabled]="produtoInputId() == null || quantidadeInput() <= 0">
+					<i class="bi bi-plus-circle"></i>
+					Acrescentar Produto à Nota
+				</button>
+			</form>
+			@if (erroInclusaoProduto()) {
+			<p class="text-danger">{{ erroInclusaoProduto() }}</p>
 			}
-		</tbody>
-	</table>
 
-	<button [disabled]="itensNovaNota().length === 0" (click)="criarNota()">
-		Criar Nota (status Aberta)
-	</button>
-	@if (erro) {
-	<p class="error">{{ erro }}</p>
+			<table>
+				<thead>
+					<tr>
+						<th class="col-codigo">Código</th>
+						<th>Produto</th>
+						<th>Quantidade</th>
+						<th class="col-action">Ações</th>
+					</tr>
+				</thead>
+				<tbody>
+					@for (item of itensNovaNota(); track $index) {
+					<tr>
+						<td>{{ item.codigoProduto }}</td>
+						<td>{{ item.descricaoProduto }}</td>
+						<td>{{ item.quantidade }}</td>
+						<td class="col-action">
+							<a role="button" tabindex="0" (click)="removerItem(item)" class="text-danger cursor-pointer">
+								<i class="bi bi-trash"></i>
+								Remover Produto
+							</a>
+						</td>
+					</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+		<div class="gerar-notas-execucao">
+			<button [disabled]="itensNovaNota().length === 0" (click)="gerarNota()" class="gerar-notas-botao">
+				<div class="gerar-notas-botao-icone">
+					<i class="bi bi-receipt"></i>
+				</div>
+				<div>
+					<i class="bi bi-check2-all"></i>
+					Gerar Nota Fiscal
+				</div>
+			</button>
+			@if (erroGeracaoNota()) {
+			<p class="gerar-notas-erro text-danger">{{ erroGeracaoNota() }}</p>
+			}
+		</div>
+	</div>
 	}
 </section>
 
 <section class="panel">
-	<h3>Notas Fiscais</h3>
+	<h3>Listagem das Notas Fiscais</h3>
 	<table>
 		<thead>
 			<tr>
-				<th>Número</th>
-				<th>Status</th>
-				<th>Itens</th>
-				<th>Ações</th>
+				<th class="col-num-sequencia">Número</th>
+				<th>Produtos</th>
+				<th class="col-status">Status</th>
+				<th class="col-action">Ações</th>
 			</tr>
 		</thead>
 		<tbody>
 			@for (nota of notas(); track $index) {
-			<tr>
-				<td>{{ nota.numeroSequencial }}</td>
-				<td>{{ nota.status }}</td>
-				<td>{{ nota.itens.length }}</td>
+			<tr [style.backgroundColor]="nota.status === 1 ? 'var(--sys-success-15)' : 'var(--sys-outline-15)'">
+				<td class="col-num-sequencia">{{ nota.numeroSequencial }}</td>
 				<td>
-					<button [disabled]="nota.status !== 'Aberta' || imprimindoId === nota.id" (click)="imprimir(nota.id)">
-						{{ imprimindoId === nota.id ? 'Processando...' : 'Imprimir' }}
+					<div class="notas-produtos-horizontal-list">
+						@for (item of nota.itens; track $index) {
+						<span class="notas-produtos-horizontal-item">
+							<span class="notas-produtos-horizontal-quantidade">
+								{{ item.quantidade }}
+							</span>
+							<span class="notas-produtos-horizontal-texto">
+								{{ item.descricaoProduto }}
+							</span>
+						</span>
+						}
+					</div>
+				</td>
+				<td class="col-status">
+					{{ nota.status === 1 ? 'Aberta' : 'Fechada' }}
+				</td>
+				<td class="col-action">
+					<button [style.width]="'100%'" class="botao-imprimir"
+						[disabled]="nota.status !== 1 || imprimindoId().includes(nota.id)" (click)="imprimir(nota.id)">
+						<i class="bi bi-printer"></i>
+						{{ imprimindoId().includes(nota.id) ? 'Processando...' : 'Imprimir' }}
+						@if(imprimindoId().includes(nota.id)){
+						<div class="spinner-border"></div>
+						}
 					</button>
 				</td>
 			</tr>
 			}
 		</tbody>
 	</table>
+	@if (erroListagemNotas()) {
+	<p class="text-danger text-right">{{ erroListagemNotas() }}</p>
+	}
+	<div class="nota-fiscal-legenda">
+		<ul>
+			<li>
+				<i class="bi bi-circle-fill" [style.color]="'var(--sys-success-15)'"></i>
+				<span> Aberta </span>
+			</li>
+			<li>
+				<i class="bi bi-circle-fill" [style.color]="'var(--sys-outline-15)'"></i>
+				<span> Fechada </span>
+			</li>
+		</ul>
+	</div>
 </section>

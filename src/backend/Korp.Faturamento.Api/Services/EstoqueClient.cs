@@ -6,7 +6,7 @@ namespace Korp.Faturamento.Api.Services;
 
 public sealed class EstoqueClient(HttpClient httpClient)
 {
-	public async Task<(bool sucesso, string? mensagem, HttpStatusCode statusCode)> BaixarEstoqueAsync(EstoqueBaixaRequest request, CancellationToken cancellationToken)
+	public async Task<(bool sucesso, string? mensagem, HttpStatusCode StatusCode)> BaixarEstoqueAsync(EstoqueBaixaRequest request, CancellationToken cancellationToken)
 	{
 		var response = await httpClient.PostAsJsonAsync("api/estoque/baixas", request, cancellationToken);
 		if (response.IsSuccessStatusCode)

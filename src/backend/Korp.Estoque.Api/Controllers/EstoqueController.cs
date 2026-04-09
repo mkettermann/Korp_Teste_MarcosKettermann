@@ -36,7 +36,7 @@ public sealed class EstoqueController(EstoqueDbContext dbContext) : ControllerBa
 
 				if (produto.Saldo < item.Quantidade)
 				{
-					return Conflict(new NormalResponse { sucesso = false, mensagem = $"Saldo insuficiente para o produto {produto.Codigo}." });
+					return Conflict(new NormalResponse { sucesso = false, mensagem = $"Estoque insuficiente de {produto.Descricao}. Disponível: {produto.Saldo}." });
 				}
 
 				produto.Saldo -= item.Quantidade;
