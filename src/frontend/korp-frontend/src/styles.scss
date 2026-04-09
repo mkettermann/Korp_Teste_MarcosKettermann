@@ -1,11 +1,11 @@
 :root{
 	--sys-h-cor: 260;
-	--sys-primary: hsl(var(--sys-h-cor), 100%, 50%);
-	--sys-on-primary: hsl(0, 0%, 100%);
+	--sys-primary: hsl(var(--sys-h-cor), 100%, 60%);
+	--sys-on-primary: hsl(0, 0%, 95%);
 	--sys-primary-15: hsl(var(--sys-h-cor), 100%, 50%, 0.15);
-	--sys-on-primary-15: hsl(0, 0%, 100%);
+	--sys-on-primary-15: hsl(0, 0%, 95%);
 	--sys-error: hsl(4, 77%, 59%);
-	--sys-on-error: hsl(0, 0%, 100%);
+	--sys-on-error: hsl(0, 0%, 95%);
 	--sys-dark: hsl(210, 50%, 12%);
 	--sys-dark-15: hsl(210, 50%, 12%, 0.15);
 	--sys-dark-7: hsl(210, 50%, 12%, 0.07);
@@ -18,7 +18,7 @@ html.light-theme {
 	--sys-on-background: hsl(210, 50%, 10%);
 	--sys-background-gradient: linear-gradient(135deg, hsl(210, 40%, 98%), hsl(214, 30%, 91%));
 	--sys-outline: hsl(210, 40%, 92%);
-	--sys-on-outline: hsl(210, 40%, 17%);
+	--sys-on-outline: hsl(210, 40%, 17%);	
 }
 html.dark-theme {
 	color-scheme: dark;
@@ -26,7 +26,8 @@ html.dark-theme {
 	--sys-on-background: hsl(210, 50%, 100%);
 	--sys-background-gradient: linear-gradient(135deg, hsl(210, 31%, 20%), hsl(214, 30%, 18%));
 	--sys-outline: hsl(210, 30%, 20%);
-	--sys-on-outline: hsl(210, 50%, 100%);
+	--sys-on-outline: hsl(210, 50%, 100%);	
+	--sys-primary: hsl(var(--sys-h-cor), 100%, 70%);
 }
 
 body {
@@ -51,8 +52,8 @@ body {
 	justify-content: space-between;
 	gap: 0.5rem;
 	background: linear-gradient(90deg,
-		hsl(var(--sys-h-cor), 100%, 50%),
-		hsl(var(--sys-h-cor), 100%, 50%),
+		var(--sys-primary-15),
+		var(--sys-primary-15),
 		transparent,
 		transparent,
 		transparent);
@@ -60,7 +61,7 @@ body {
 	padding-left: 4px;
 }
 .panel-text{
-	color: var(--sys-on-primary);
+	color: var(--sys-on-background);
 }
 
 .actions {
