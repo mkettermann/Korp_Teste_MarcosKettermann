@@ -33,7 +33,7 @@ public sealed class ProdutosController(EstoqueDbContext dbContext) : ControllerB
 		{
 			if (produtoExistente.Ativo)
 			{
-				return Conflict(new { Mensagem = "Já existe produto ativo com o código informado." });
+				return Conflict(new { mensagem = "Já existe produto ativo com o código informado." });
 			}
 
 			produtoExistente.Descricao = descricaoNormalizada;

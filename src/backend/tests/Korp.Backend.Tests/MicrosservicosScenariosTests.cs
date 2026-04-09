@@ -149,7 +149,7 @@ public sealed class MicrosservicosScenariosTests
 
 		var estoqueClient = CreateEstoqueClient(
 				HttpStatusCode.ServiceUnavailable,
-				new EstoqueBaixaResponse { Sucesso = false, Mensagem = "Estoque indisponivel" });
+				new EstoqueBaixaResponse { Sucesso = false, mensagem = "Estoque indisponivel" });
 
 		var controller = new NotasFiscaisController(dbContext, estoqueClient, new PdfService())
 		{

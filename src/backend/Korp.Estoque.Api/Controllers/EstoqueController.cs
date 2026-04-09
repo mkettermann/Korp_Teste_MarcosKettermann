@@ -14,7 +14,7 @@ public sealed class EstoqueController(EstoqueDbContext dbContext) : ControllerBa
 	{
 		if (request.Itens.Count == 0)
 		{
-			return BadRequest(new EstoqueBaixaResponse { Sucesso = false, Mensagem = "A nota deve conter ao menos um item." });
+			return BadRequest(new EstoqueBaixaResponse { Sucesso = false, mensagem = "A nota deve conter ao menos um item." });
 		}
 
 		await using var tx = await dbContext.Database.BeginTransactionAsync();
@@ -25,18 +25,18 @@ public sealed class EstoqueController(EstoqueDbContext dbContext) : ControllerBa
 			{
 				if (item.Quantidade <= 0)
 				{
-					return BadRequest(new EstoqueBaixaResponse { Sucesso = false, Mensagem = "Quantidade inválida para baixa." });
+					return BadRequest(new EstoqueBaixaResponse { Sucesso = false, mensagem = "Quantidade inválida para baixa." });
 				}
 
 				var produto = await dbContext.Produtos.FirstOrDefaultAsync(p => p.Id == item.ProdutoId);
 				if (produto is null)
 				{
-					return NotFound(new EstoqueBaixaResponse { Sucesso = false, Mensagem = $"Produto {item.ProdutoId} não encontrado." });
+					return NotFound(new EstoqueBaixaResponse { Sucesso = false, mensagem = $"Produto {item.ProdutoId} não encontrado." });
 				}
 
 				if (produto.Saldo < item.Quantidade)
 				{
-					return Conflict(new EstoqueBaixaResponse { Sucesso = false, Mensagem = $"Saldo insuficiente para o produto {produto.Codigo}." });
+					return Conflict(new EstoqueBaixaResponse { Sucesso = false, mensagem = $"Saldo insuficiente para o produto {produto.Codigo}." });
 				}
 
 				produto.Saldo -= item.Quantidade;
@@ -54,7 +54,7 @@ public sealed class EstoqueController(EstoqueDbContext dbContext) : ControllerBa
 			return Conflict(new EstoqueBaixaResponse
 			{
 				Sucesso = false,
-				Mensagem = "Conflito de concorrência detectado. Refaça a operação."
+				mensagem = "Conflito de concorrência detectado. Refaça a operação."
 			});
 		}
 	}

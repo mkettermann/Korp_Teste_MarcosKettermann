@@ -123,7 +123,7 @@ public sealed class NotasFiscaisController(
 
 			await dbContext.SaveChangesAsync(cancellationToken);
 			return StatusCode(StatusCodes.Status503ServiceUnavailable,
-					new { Mensagem = baixa.Mensagem ?? "Falha ao comunicar com estoque. Tente novamente." });
+					new { mensagem = baixa.Mensagem ?? "Falha ao comunicar com estoque. Tente novamente." });
 		}
 
 		nota.Status = NotaStatus.Fechada;

@@ -22,7 +22,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 
         return new BadRequestObjectResult(new
         {
-            Mensagem = "Dados inválidos. Verifique os campos obrigatórios.",
+            mensagem = "Dados inválidos. Verifique os campos obrigatórios.",
             Erros = erros
         });
     };
