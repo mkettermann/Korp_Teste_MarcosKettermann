@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Korp.Estoque.Api.Data.Migrations
 {
     [DbContext(typeof(EstoqueDbContext))]
-    [Migration("20260408152108_InitialCreate")]
+    [Migration("20260409171207_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -31,6 +31,11 @@ namespace Korp.Estoque.Api.Data.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Ativo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
 
                     b.Property<string>("Codigo")
                         .IsRequired()
