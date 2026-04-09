@@ -5,6 +5,7 @@ import { ProdutosApiService } from '../../services/produtos-api.service';
 import { Produto } from '../produtos/produtos-model';
 import { ItemNotaInput, NotaFiscal } from './nota-fiscal.model';
 import { FormsModule } from '@angular/forms';
+import { Ui } from '../../services/base/ui.service';
 
 @Component({
   selector: 'app-nota-fiscal',
@@ -27,7 +28,8 @@ export class RotaNotaFiscal {
   erroInclusaoProduto = signal<string>('');
 
   erroGeracaoNota = signal<string>('');
-  imprimindoId = signal<number | null>(null);
+  erroListagemNotas = signal<string>('');
+  imprimindoId = signal<number[]>([]);
 
   ngOnInit(): void {
     this.carregarProdutos();
@@ -77,6 +79,7 @@ export class RotaNotaFiscal {
       return Array.from(itensMap.values());
     });
 
+    this.erroInclusaoProduto.set('');
     this.produtoInputId.set(null);
     this.quantidadeInput.set(1);
   }
@@ -107,9 +110,12 @@ export class RotaNotaFiscal {
       });
   }
 
-  imprimir(notaId: number): void {
+  async imprimir(notaId: number): Promise<void> {
     this.erroGeracaoNota.set('');
-    this.imprimindoId.set(notaId);
+    this.imprimindoId.update((ids) => [...ids, notaId]);
+
+    await Ui.wait(2500);
+
     // A geração da UUID está sendo feita aqui no frontend para garantir a idempotência da requisição, evitando impressões duplicadas caso o usuário clique mais de uma vez ou haja instabilidade na rede.
     const idempotencyKey = crypto.randomUUID();
 
@@ -118,27 +124,26 @@ export class RotaNotaFiscal {
         this.downloadPdf(response.pdfBase64, `nota-${response.numero}.pdf`);
         this.carregarNotas();
         this.carregarProdutos();
+        this.imprimindoId.update((ids) => ids.filter((id) => id !== notaId));
       },
       error: (err) => {
-        this.erroGeracaoNota.set(err?.error?.mensagem ?? err?.error?.title ?? 'Falha ao imprimir nota fiscal.');
+        this.erroListagemNotas.set(err?.error?.mensagem ?? err?.error?.title ?? 'Falha ao imprimir nota fiscal.');
+        this.imprimindoId.update((ids) => ids.filter((id) => id !== notaId));
       },
-      complete: () => {
-        this.imprimindoId.set(null);
-      }
     });
   }
 
   private carregarProdutos(): void {
     this.produtosApi.listar().pipe(takeUntil(this.subs)).subscribe({
       next: (dados) => this.produtos.set(dados),
-      error: () => this.erroGeracaoNota.set('Falha ao carregar produtos.')
+      error: () => this.erroInclusaoProduto.set('Falha ao carregar produtos.')
     });
   }
 
   private carregarNotas(): void {
     this.notasApi.listar().pipe(takeUntil(this.subs)).subscribe({
       next: (dados) => this.notas.set(dados),
-      error: () => this.erroGeracaoNota.set('Falha ao carregar notas fiscais.')
+      error: () => this.erroListagemNotas.set('Falha ao carregar notas fiscais.')
     });
   }
 

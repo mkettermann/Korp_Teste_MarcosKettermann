@@ -97,34 +97,34 @@
 		</thead>
 		<tbody>
 			@for (nota of notas(); track $index) {
-			<tr>
+			<tr [style.backgroundColor]="nota.status === 1 ? 'var(--sys-success-15)' : 'var(--sys-outline-15)'">
 				<td class="col-num-sequencia">{{ nota.numeroSequencial }}</td>
 				<td>{{ nota.itens.length }}</td>
 				<td class="col-status">
 					{{ nota.status === 1 ? 'Aberta' : 'Fechada' }}
 				</td>
 				<td class="col-action">
-					<button [disabled]="nota.status !== 1 || imprimindoId() === nota.id" (click)="imprimir(nota.id)"
+					<button [disabled]="nota.status !== 1 || imprimindoId().includes(nota.id)" (click)="imprimir(nota.id)"
 						[style.width]="'100%'">
 						<i class="bi bi-printer"></i>
-						{{ imprimindoId() === nota.id ? 'Processando...' : 'Imprimir' }}
+						{{ imprimindoId().includes(nota.id) ? 'Processando...' : 'Imprimir' }}
 					</button>
 				</td>
 			</tr>
 			}
 		</tbody>
 	</table>
-	@if (erroGeracaoNota()) {
-	<p class="text-danger text-right">{{ erroGeracaoNota() }}</p>
+	@if (erroListagemNotas()) {
+	<p class="text-danger text-right">{{ erroListagemNotas() }}</p>
 	}
-	<div>
+	<div class="nota-fiscal-legenda">
 		<ul>
 			<li>
-				<i class="bi bi-circle-fill text-success f-s-5"></i>
+				<i class="bi bi-circle-fill text-success"></i>
 				Aberta
 			</li>
 			<li>
-				<i class="bi bi-circle-fill text-danger f-s-5"></i>
+				<i class="bi bi-circle-fill text-danger"></i>
 				Fechada
 			</li>
 		</ul>

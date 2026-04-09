@@ -6,8 +6,10 @@
 	--sys-on-primary-15: hsl(0, 0%, 95%);
 	--sys-error: hsl(4, 77%, 59%);
 	--sys-on-error: hsl(0, 0%, 95%);
+	--sys-error-15: hsl(4, 77%, 59%, 0.15);
 	--sys-success: hsl(120, 53%, 56%);
 	--sys-on-success: hsl(0, 0%, 5%);
+	--sys-success-15: hsl(120, 53%, 56%, 0.15);
 	--sys-dark: hsl(210, 50%, 12%);
 	--sys-dark-15: hsl(210, 50%, 12%, 0.15);
 	--sys-dark-7: hsl(210, 50%, 12%, 0.07);
@@ -20,6 +22,7 @@ html.light-theme {
 	--sys-background-gradient: linear-gradient(135deg, hsl(210, 40%, 98%), hsl(214, 30%, 91%));
 	--sys-outline: hsl(210, 40%, 92%);
 	--sys-on-outline: hsl(210, 40%, 17%);
+	--sys-outline-15: hsl(210, 40%, 92%, 0.15);
 
 	select {
 		color: var(--sys-on-background);
@@ -32,7 +35,8 @@ html.dark-theme {
 	--sys-on-background: hsl(210, 50%, 100%);
 	--sys-background-gradient: linear-gradient(135deg, hsl(210, 31%, 20%), hsl(214, 30%, 18%));
 	--sys-outline: hsl(210, 30%, 20%);
-	--sys-on-outline: hsl(210, 50%, 100%);	
+	--sys-on-outline: hsl(210, 50%, 100%);
+	--sys-outline-15: hsl(210, 30%, 20%, 0.15);
 	--sys-primary: hsl(var(--sys-h-cor), 100%, 70%);
 	
 	select option {
