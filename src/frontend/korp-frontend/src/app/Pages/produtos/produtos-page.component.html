@@ -23,35 +23,37 @@
 	<table>
 		<thead>
 			<tr>
-				<!-- <th>ID</th> -->
 				<th>Código</th>
 				<th>Descrição</th>
 				<th>Saldo</th>
+				<th class="col-ativo">Ativo</th>
 				<th class="col-action">Ações</th>
 			</tr>
 		</thead>
 		@if(listagemCarregando()){
 		<tr>
-			<td colspan="4" class="text-center">Carregando...</td>
+			<td colspan="5" class="text-center">Carregando...</td>
 		</tr>
 		} @else {
 
 		<tbody>
 			@for (produto of produtos(); track $index) {
 			<tr>
-				<!-- <td>{{ produto.id }}</td> -->
-				<td>{{ produto.codigo }}</td>
+				<td [style.width.px]="100">{{ produto.codigo }}</td>
 				<td>{{ produto.descricao }}</td>
 				<td>{{ produto.saldo }}</td>
+				<td class="col-ativo">
+					<i class="bi {{ produto.ativo ? 'bi-check-circle text-success' : 'bi-x-lg text-danger' }}"></i>
+				</td>
 				<td class="col-action">
 					<div class="flex text-center gap-2">
 						<a routerLink="/produtos/editar/{{ produto.id }}" routerLinkActive="active"
-							(click)="editandoProduto(produto)">
+							(click)="produtosApi.modificandoProduto.set(produto)">
 							<i class="bi bi-pencil"></i>
 							Editar
 						</a>
 						<a routerLink="/produtos/excluir/{{ produto.id }}" routerLinkActive="active"
-							(click)="excluindoProduto(produto)" class="text-danger">
+							(click)="produtosApi.modificandoProduto.set(produto)" class="text-danger">
 							<i class="bi bi-trash"></i>
 							Excluir
 						</a>
@@ -62,7 +64,7 @@
 		</tbody>
 		<tfoot>
 			<tr>
-				<td colspan="4" class="text-right">Total de produtos: {{ produtos().length }}</td>
+				<td colspan="5" class="text-right">Total de produtos: {{ produtos().length }}</td>
 			</tr>
 		</tfoot>
 		}

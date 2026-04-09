@@ -6,6 +6,8 @@
 	--sys-on-primary-15: hsl(0, 0%, 95%);
 	--sys-error: hsl(4, 77%, 59%);
 	--sys-on-error: hsl(0, 0%, 95%);
+	--sys-success: hsl(120, 53%, 56%);
+	--sys-on-success: hsl(0, 0%, 5%);
 	--sys-dark: hsl(210, 50%, 12%);
 	--sys-dark-15: hsl(210, 50%, 12%, 0.15);
 	--sys-dark-7: hsl(210, 50%, 12%, 0.07);
@@ -134,11 +136,6 @@ td.col-action{
 	padding: 0rem;
 }
 
-.error {
-	color: var(--sys-error);
-	font-weight: 700;
-}
-
 
 a {
   text-decoration: none;
@@ -190,6 +187,13 @@ hr {
 .bg-danger{
 	background-color: var(--sys-error);
 	color: var(--sys-on-error);
+}
+.text-success{
+	color: var(--sys-success);
+}
+.bg-success{
+	background-color: var(--sys-success);
+	color: var(--sys-on-success);
 }
 .flex{
 	display: flex;

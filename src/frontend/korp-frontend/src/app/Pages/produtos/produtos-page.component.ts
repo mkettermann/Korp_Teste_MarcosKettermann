@@ -14,7 +14,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 export class ProdutosPageComponent implements OnInit, OnDestroy {
 
 	private subs = new Subject<void>();
-	private readonly produtosApi = inject(ProdutosApiService);
+	protected readonly produtosApi = inject(ProdutosApiService);
 
 	erro = signal<IErrosPadroes | null>(null);
 	produtos = signal<Produto[]>([]);
@@ -52,10 +52,4 @@ export class ProdutosPageComponent implements OnInit, OnDestroy {
 			});
 	}
 
-	editandoProduto(produto: Produto) {
-		this.produtosApi.modificandoProduto.set(produto);
-	}
-	excluindoProduto(produto: Produto) {
-		this.produtosApi.modificandoProduto.set(produto);
-	}
 }
