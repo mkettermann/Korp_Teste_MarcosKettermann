@@ -13,11 +13,13 @@ public sealed class ProdutosController(EstoqueDbContext dbContext) : ControllerB
 	[HttpGet]
 	public async Task<ActionResult<IReadOnlyCollection<Produto>>> ListarAsync([FromQuery] bool? ativo)
 	{
-		var produtosQuery = dbContext.Produtos.AsNoTracking().OrderBy(p => p.Id);
+		var produtosQuery = dbContext.Produtos.AsNoTracking().OrderByDescending(p => p.Id);
 
 		if (ativo.HasValue)
 		{
-			produtosQuery = produtosQuery.Where(p => p.Ativo == ativo.Value).OrderBy(p => p.Id);
+			produtosQuery = produtosQuery
+				.Where(p => p.Ativo == ativo.Value)
+				.OrderByDescending(p => p.Id);
 		}
 
 		var produtos = await produtosQuery.ToListAsync();

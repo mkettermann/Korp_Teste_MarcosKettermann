@@ -22,7 +22,7 @@ public sealed class NotasFiscaisController(
 		var notas = await dbContext.NotasFiscais
 				.AsNoTracking()
 				.Include(x => x.Itens)
-				.OrderBy(x => x.Id)
+				.OrderByDescending(x => x.Id)
 				.ToListAsync();
 
 		return Ok(notas);
@@ -49,7 +49,7 @@ public sealed class NotasFiscaisController(
 				ProdutoId = i.ProdutoId,
 				DescricaoProduto = i.DescricaoProduto,
 				Quantidade = i.Quantidade
-			}).OrderBy(p => p.Id).ToList()
+			}).ToList()
 		};
 
 		dbContext.NotasFiscais.Add(nota);
