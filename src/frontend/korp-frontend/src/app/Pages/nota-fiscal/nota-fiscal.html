@@ -7,64 +7,73 @@
 			<i class="bi bi-receipt"></i>
 		</div>
 	</div>
-
 	<hr>
-	<h3>Inclusão de Produtos</h3>
-	<form class="grid" (ngSubmit)="adicionarItem()">
-		<label>
-			Produto *
-			<select name="produto" (ngModelChange)="produtoSelecionadoId.set($event)" [ngModel]="produtoSelecionadoId()"
-				required>
-				<option [ngValue]="null">Selecione...</option>
-				@for (produto of produtos(); track $index) {
-				<option [ngValue]="produto.id">
-					{{ produto.codigo }} - {{ produto.descricao }} - Saldo: {{ produto.saldo }}
-				</option>
-				}
-			</select>
-		</label>
-		<label>
-			Quantidade *
-			<input name="quantidade" (ngModelChange)="quantidade.set($event)" [ngModel]="quantidade()" type="number" min="1"
-				required />
-		</label>
-		<button type="submit" [disabled]="produtoSelecionadoId() == null || quantidade() <= 0">
-			<i class="bi bi-plus-circle"></i>
-			Acrescentar Produto à Nota
-		</button>
-	</form>
+	<div class="gerar-notas-container">
+		<div class="gerar-notas-itens">
+			<h3>Inclusão de Produtos</h3>
+			<form class="grid" (ngSubmit)="adicionarItem()">
+				<label>
+					Produto *
+					<select name="produto" (ngModelChange)="produtoSelecionadoId.set($event)" [ngModel]="produtoSelecionadoId()"
+						required>
+						<option [ngValue]="null">Selecione...</option>
+						@for (produto of produtos(); track $index) {
+						<option [ngValue]="produto.id">
+							{{ produto.codigo }} - {{ produto.descricao }} - Saldo: {{ produto.saldo }}
+						</option>
+						}
+					</select>
+				</label>
+				<label>
+					Quantidade *
+					<input name="quantidade" (ngModelChange)="quantidade.set($event)" [ngModel]="quantidade()" type="number"
+						min="1" required />
+				</label>
+				<button type="submit" [disabled]="produtoSelecionadoId() == null || quantidade() <= 0">
+					<i class="bi bi-plus-circle"></i>
+					Acrescentar Produto à Nota
+				</button>
+			</form>
 
-	<table>
-		<thead>
-			<tr>
-				<th>Produto</th>
-				<th>Quantidade</th>
-				<th class="col-action">Ações</th>
-			</tr>
-		</thead>
-		<tbody>
-			@for (item of itensNovaNota(); track $index) {
-			<tr>
-				<td>{{ item.descricaoProduto }}</td>
-				<td>{{ item.quantidade }}</td>
-				<td class="col-action">
-					<a (click)="removerItem(item)" class="text-danger cursor-pointer">
-						<i class="bi bi-trash"></i>
-						Remover Produto
-					</a>
-				</td>
-			</tr>
+			<table>
+				<thead>
+					<tr>
+						<th>Produto</th>
+						<th>Quantidade</th>
+						<th class="col-action">Ações</th>
+					</tr>
+				</thead>
+				<tbody>
+					@for (item of itensNovaNota(); track $index) {
+					<tr>
+						<td>{{ item.descricaoProduto }}</td>
+						<td>{{ item.quantidade }}</td>
+						<td class="col-action">
+							<a (click)="removerItem(item)" class="text-danger cursor-pointer">
+								<i class="bi bi-trash"></i>
+								Remover Produto
+							</a>
+						</td>
+					</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+		<div class="gerar-notas-execucao">
+			<button [disabled]="itensNovaNota().length === 0" (click)="criarNota()" class="gerar-notas-botao">
+				<div class="gerar-notas-botao-icone">
+					<i class="bi bi-receipt"></i>
+				</div>
+				<div>
+					<i class="bi bi-check2-all"></i>
+					Gerar Nota Fiscal
+				</div>
+			</button>
+			@if (!erro()) {
+			<p class="gerar-notas-erro text-danger">{{ erro() }}</p>
 			}
-		</tbody>
-	</table>
-
-	<button [disabled]="itensNovaNota().length === 0" (click)="criarNota()">
-		<i class="bi bi-plus-circle"></i>
-		Gerar Nota Fiscal
-	</button>
-	@if (erro()) {
-	<p class="error">{{ erro() }}</p>
-	}
+		</div>
+	</div>
 </section>
 
 <section class="panel">

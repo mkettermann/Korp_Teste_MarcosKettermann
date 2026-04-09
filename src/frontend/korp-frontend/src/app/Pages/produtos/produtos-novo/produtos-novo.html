@@ -19,5 +19,5 @@
 	<button type="submit"><i class="bi bi-plus-circle"></i> Adicionar Produto</button>
 </form>
 @if(erro()){
-<p class="error">{{ erro()?.mensagem ?? 'Erro desconhecido' }}</p>
+<p class="text-danger">{{ erro()?.mensagem ?? 'Erro desconhecido' }}</p>
 }

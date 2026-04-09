@@ -13,3 +13,52 @@
 	text-align: center;
 	width: 70px;
 }
+
+.gerar-notas-container{
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+}
+
+.gerar-notas-itens{
+	flex: 1;
+	outline: 1px solid var(--sys-outline);
+	outline-offset: -1px;
+	padding: 1rem;
+	border-radius: 0.5rem;	
+}
+
+.gerar-notas-execucao{
+	display: flex;
+	flex-direction: column;
+}
+
+.gerar-notas-botao{
+	display: flex;
+	flex-direction: column;
+	justify-content: end;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.5rem 1rem;
+	border-radius: 0.5rem;
+	background-color: var(--sys-primary);
+	color: var(--sys-on-primary);
+	font-weight: 600;
+	outline: none;
+	border: none;
+	transition: background-color 0.2s;
+	flex: 1;
+	height: auto;
+}
+
+.gerar-notas-erro{
+	flex: 0;
+}
+
+.gerar-notas-botao-icone{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 5rem;
+	flex:1;
+}
