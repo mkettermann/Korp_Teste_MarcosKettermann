@@ -73,8 +73,9 @@ app.UseExceptionHandler(errorApp =>
     });
 });
 
-app.UseHttpsRedirection();
+//Não altere a ordem. Fronend é Angular e depende de CORS para funcionar.
 app.UseCors("frontend");
+app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
