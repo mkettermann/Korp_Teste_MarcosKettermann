@@ -10,7 +10,7 @@ describe('ProdutosExcluir', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ProdutosExcluir],
-      providers: [provideRouter([])],
+      providers: [provideRouter([{ path: 'produtos', component: ProdutosExcluir }])],
     })
       .compileComponents();
 

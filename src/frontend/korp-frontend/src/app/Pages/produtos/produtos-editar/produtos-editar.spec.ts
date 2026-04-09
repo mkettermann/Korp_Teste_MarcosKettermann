@@ -10,7 +10,7 @@ describe('ProdutosEditar', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ProdutosEditar],
-      providers: [provideRouter([])],
+      providers: [provideRouter([{ path: 'produtos', component: ProdutosEditar }])],
     })
       .compileComponents();
 

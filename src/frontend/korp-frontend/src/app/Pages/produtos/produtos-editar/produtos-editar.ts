@@ -33,7 +33,7 @@ export class ProdutosEditar implements OnDestroy {
         this.descricao.set(produto.descricao);
         this.saldo.set(produto.saldo);
       } else {
-        console.log('⛓️‍💥 Redirecionando para listagem.');
+        // console.log('⛓️‍💥 Redirecionando para listagem.');
         this.router.navigate(['/produtos']);
       }
     });
