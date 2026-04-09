@@ -1,8 +1,7 @@
-:host {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #1f2937;
+:host {  
   min-height: 100vh;
-  background: linear-gradient(135deg, hsl(210 40 98), hsl(214 32 91));
+  color: var(--sys-on-background);
+  background: var(--sys-background-gradient);
   display: block;
 }
 
@@ -27,42 +26,4 @@ label {
   display: grid;
   gap: 0.35rem;
   font-weight: 600;
-}
-
-input,
-select,
-button {
-  padding: 0.55rem;
-  border-radius: 8px;
-  border: 1px solid #cbd5e1;
-}
-
-button {
-  cursor: pointer;
-  background: #0ea5e9;
-  border: none;
-  color: #fff;
-  font-weight: 600;
-}
-
-button:disabled {
-  background: #94a3b8;
-  cursor: not-allowed;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th,
-td {
-  border-bottom: 1px solid #e2e8f0;
-  padding: 0.6rem;
-  text-align: left;
-}
-
-.error {
-  color: #b91c1c;
-  font-weight: 700;
 }
