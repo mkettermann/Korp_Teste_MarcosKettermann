@@ -19,7 +19,12 @@ html.light-theme {
 	--sys-on-background: hsl(210, 50%, 10%);
 	--sys-background-gradient: linear-gradient(135deg, hsl(210, 40%, 98%), hsl(214, 30%, 91%));
 	--sys-outline: hsl(210, 40%, 92%);
-	--sys-on-outline: hsl(210, 40%, 17%);	
+	--sys-on-outline: hsl(210, 40%, 17%);
+
+	select {
+		color: var(--sys-on-background);
+		background-color: var(--sys-background);
+	}
 }
 html.dark-theme {
 	color-scheme: dark;
@@ -29,6 +34,11 @@ html.dark-theme {
 	--sys-outline: hsl(210, 30%, 20%);
 	--sys-on-outline: hsl(210, 50%, 100%);	
 	--sys-primary: hsl(var(--sys-h-cor), 100%, 70%);
+	
+	select option {
+		color: var(--sys-on-background);
+		background-color: var(--sys-background);
+	}
 }
 
 body {
@@ -60,6 +70,7 @@ body {
 		transparent);
 	border-radius: 8px;
 	padding-left: 4px;
+	min-height: 33px;
 }
 .panel-text{
 	color: var(--sys-on-background);
@@ -214,4 +225,7 @@ hr {
 }
 .f-s-15{
 	font-size: 1.5rem;
+}
+.cursor-pointer{
+	cursor: pointer;
 }

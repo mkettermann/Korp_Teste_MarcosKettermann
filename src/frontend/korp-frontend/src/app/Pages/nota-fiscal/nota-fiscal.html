@@ -4,63 +4,71 @@
 			Nota Fiscal
 		</div>
 		<div class="actions">
-			<a routerLink="/notas/novo" routerLinkActive="active">
-				<i class="bi bi-plus"></i>
-				Novo
-			</a>
 			<i class="bi bi-receipt"></i>
 		</div>
 	</div>
 
+	<hr>
+	<h3>Inclusão de Produtos</h3>
 	<form class="grid" (ngSubmit)="adicionarItem()">
 		<label>
-			Produto
-			<select name="produto" [(ngModel)]="produtoSelecionadoId" required>
+			Produto *
+			<select name="produto" (ngModelChange)="produtoSelecionadoId.set($event)" [ngModel]="produtoSelecionadoId()"
+				required>
 				<option [ngValue]="null">Selecione...</option>
 				@for (produto of produtos(); track $index) {
-				<option [ngValue]="produto.id">{{ produto.codigo }} - {{ produto.descricao }} (saldo {{ produto.saldo }})
+				<option [ngValue]="produto.id">
+					{{ produto.codigo }} - {{ produto.descricao }} - Saldo: {{ produto.saldo }}
 				</option>
 				}
 			</select>
 		</label>
 		<label>
-			Quantidade
-			<input name="quantidade" [(ngModel)]="quantidade" type="number" min="1" required />
+			Quantidade *
+			<input name="quantidade" (ngModelChange)="quantidade.set($event)" [ngModel]="quantidade()" type="number" min="1"
+				required />
 		</label>
-		<button type="submit">Adicionar item</button>
+		<button type="submit" [disabled]="produtoSelecionadoId() == null || quantidade() <= 0">
+			<i class="bi bi-plus-circle"></i>
+			Acrescentar Produto à Nota
+		</button>
 	</form>
-	<router-outlet></router-outlet>
 
 	<table>
 		<thead>
 			<tr>
 				<th>Produto</th>
 				<th>Quantidade</th>
+				<th class="col-action">Ações</th>
 			</tr>
 		</thead>
 		<tbody>
-			@for (item of itensNovaNota(); track $index; let indexDoItem = $index) {
+			@for (item of itensNovaNota(); track $index) {
 			<tr>
 				<td>{{ item.descricaoProduto }}</td>
 				<td>{{ item.quantidade }}</td>
-				<td><button type="button" (click)="removerItem(indexDoItem)">
-						Remover
-					</button></td>
+				<td class="col-action">
+					<a (click)="removerItem(item)" class="text-danger cursor-pointer">
+						<i class="bi bi-trash"></i>
+						Remover Produto
+					</a>
+				</td>
 			</tr>
 			}
 		</tbody>
 	</table>
 
 	<button [disabled]="itensNovaNota().length === 0" (click)="criarNota()">
-		Criar Nota (status Aberta)
+		<i class="bi bi-plus-circle"></i>
+		Gerar Nota Fiscal
 	</button>
-	@if (erro) {
-	<p class="error">{{ erro }}</p>
+	@if (erro()) {
+	<p class="error">{{ erro() }}</p>
 	}
 </section>
 
 <section class="panel">
-	<h3>Notas Fiscais</h3>
+	<h3>Listagem das Notas Fiscais</h3>
 	<table>
 		<thead>
 			<tr>
@@ -77,8 +85,8 @@
 				<td>{{ nota.status }}</td>
 				<td>{{ nota.itens.length }}</td>
 				<td>
-					<button [disabled]="nota.status !== 'Aberta' || imprimindoId === nota.id" (click)="imprimir(nota.id)">
-						{{ imprimindoId === nota.id ? 'Processando...' : 'Imprimir' }}
+					<button [disabled]="nota.status !== 'Aberta' || imprimindoId() === nota.id" (click)="imprimir(nota.id)">
+						{{ imprimindoId() === nota.id ? 'Processando...' : 'Imprimir' }}
 					</button>
 				</td>
 			</tr>

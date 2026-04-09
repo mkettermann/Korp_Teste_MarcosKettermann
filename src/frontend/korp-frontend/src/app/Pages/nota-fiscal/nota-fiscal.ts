@@ -1,5 +1,4 @@
 import { Component, inject, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { NotasApiService } from '../../services/notas-api.service';
 import { ProdutosApiService } from '../../services/produtos-api.service';
@@ -11,7 +10,7 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-nota-fiscal',
   templateUrl: './nota-fiscal.html',
   styleUrl: './nota-fiscal.scss',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, FormsModule],
+  imports: [FormsModule],
 })
 export class RotaNotaFiscal {
 
@@ -23,10 +22,10 @@ export class RotaNotaFiscal {
   notas = signal<NotaFiscal[]>([]);
   itensNovaNota = signal<ItemNotaInput[]>([]);
 
-  produtoSelecionadoId: number | null = null;
-  quantidade = 1;
-  erro = '';
-  imprimindoId: number | null = null;
+  produtoSelecionadoId = signal<number | null>(null);
+  quantidade = signal<number>(1);
+  erro = signal<string>('');
+  imprimindoId = signal<number | null>(null);
 
   ngOnInit(): void {
     this.carregarProdutos();
@@ -38,9 +37,9 @@ export class RotaNotaFiscal {
   }
 
   adicionarItem(): void {
-    if (this.produtoSelecionadoId == null || this.quantidade <= 0) return;
+    if (this.produtoSelecionadoId() == null || this.quantidade() <= 0) return;
 
-    const produto = this.produtos().find((p) => p.id === this.produtoSelecionadoId);
+    const produto = this.produtos().find((p) => p.id === this.produtoSelecionadoId());
     if (!produto) return;
 
     this.itensNovaNota.update((itens) => [
@@ -48,24 +47,27 @@ export class RotaNotaFiscal {
       {
         produtoId: produto.id,
         descricaoProduto: produto.descricao,
-        quantidade: this.quantidade
+        quantidade: this.quantidade(),
       }
     ]);
 
-    this.produtoSelecionadoId = null;
-    this.quantidade = 1;
+    this.produtoSelecionadoId.set(null);
+    this.quantidade.set(1);
   }
 
-  removerItem(index: number): void {
+  removerItem(item: ItemNotaInput): void {
     this.itensNovaNota.update((itens) => {
       const novosItens = [...itens];
-      novosItens.splice(index, 1);
+      const index = novosItens.indexOf(item);
+      if (index !== -1) {
+        novosItens.splice(index, 1);
+      }
       return novosItens;
     });
   }
 
   criarNota(): void {
-    this.erro = '';
+    this.erro.set('');
     this.notasApi.criar({ itens: this.itensNovaNota() })
       .pipe(takeUntil(this.subs))
       .subscribe({
@@ -74,14 +76,14 @@ export class RotaNotaFiscal {
           this.carregarNotas();
         },
         error: (err) => {
-          this.erro = err?.error?.title ?? err?.error ?? 'Falha ao criar nota fiscal.';
+          this.erro.set(err?.error?.title ?? err?.error ?? 'Falha ao criar nota fiscal.');
         }
       });
   }
 
   imprimir(notaId: number): void {
-    this.erro = '';
-    this.imprimindoId = notaId;
+    this.erro.set('');
+    this.imprimindoId.set(notaId);
     // A geração da UUID está sendo feita aqui no frontend para garantir a idempotência da requisição, evitando impressões duplicadas caso o usuário clique mais de uma vez ou haja instabilidade na rede.
     const idempotencyKey = crypto.randomUUID();
 
@@ -92,10 +94,10 @@ export class RotaNotaFiscal {
         this.carregarProdutos();
       },
       error: (err) => {
-        this.erro = err?.error?.mensagem ?? err?.error?.title ?? 'Falha ao imprimir nota fiscal.';
+        this.erro.set(err?.error?.mensagem ?? err?.error?.title ?? 'Falha ao imprimir nota fiscal.');
       },
       complete: () => {
-        this.imprimindoId = null;
+        this.imprimindoId.set(null);
       }
     });
   }
@@ -103,14 +105,14 @@ export class RotaNotaFiscal {
   private carregarProdutos(): void {
     this.produtosApi.listar().pipe(takeUntil(this.subs)).subscribe({
       next: (dados) => this.produtos.set(dados),
-      error: () => (this.erro = 'Falha ao carregar produtos.')
+      error: () => this.erro.set('Falha ao carregar produtos.')
     });
   }
 
   private carregarNotas(): void {
     this.notasApi.listar().pipe(takeUntil(this.subs)).subscribe({
       next: (dados) => this.notas.set(dados),
-      error: () => (this.erro = 'Falha ao carregar notas fiscais.')
+      error: () => this.erro.set('Falha ao carregar notas fiscais.')
     });
   }
 
