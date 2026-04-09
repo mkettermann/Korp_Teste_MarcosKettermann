@@ -38,7 +38,7 @@ export class RotaNotaFiscal {
   }
 
   adicionarItem(): void {
-    if (!this.produtoSelecionadoId || this.quantidade <= 0) return;
+    if (this.produtoSelecionadoId == null || this.quantidade <= 0) return;
 
     const produto = this.produtos().find((p) => p.id === this.produtoSelecionadoId);
     if (!produto) return;

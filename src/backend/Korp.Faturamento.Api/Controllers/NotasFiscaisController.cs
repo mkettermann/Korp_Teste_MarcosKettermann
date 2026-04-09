@@ -31,8 +31,15 @@ public sealed class NotasFiscaisController(
 	[HttpPost]
 	public async Task<ActionResult<NotaFiscal>> CriarAsync([FromBody] CriarNotaRequest request)
 	{
+		// Observação: Em um cenário real, o número sequencial provavelmente seria gerado por um serviço dedicado ou pelo banco de dados para evitar concorrência. Aqui é requisito do sistema gerar falhas de concorrência, então fazemos dessa forma simples para exemplificar.
 		var proximoNumero = (await dbContext.NotasFiscais.MaxAsync(x => (int?)x.NumeroSequencial) ?? 0) + 1;
 
+		var validacaoRequest = new ValidationContext(request);
+		var resultados = new List<ValidationResult>();
+		if (!Validator.TryValidateObject(request, validacaoRequest, resultados, true))
+		{
+			return BadRequest(resultados);
+		}
 		var nota = new NotaFiscal
 		{
 			NumeroSequencial = proximoNumero,
@@ -110,16 +117,31 @@ public sealed class NotasFiscaisController(
 		var baixa = await estoqueClient.BaixarEstoqueAsync(baixaRequest, cancellationToken);
 		if (!baixa.sucesso)
 		{
-			dbContext.OutboxMessages.Add(new OutboxMessage
+			var statusCode = baixa.statusCode >= 400 && baixa.statusCode <= 599
+					? baixa.statusCode
+					: StatusCodes.Status503ServiceUnavailable;
+			var falhaTransitoria = statusCode >= 500;
+
+			if (falhaTransitoria)
 			{
-				Tipo = "FalhaBaixaEstoque",
-				Payload = JsonSerializer.Serialize(new
+				dbContext.OutboxMessages.Add(new OutboxMessage
 				{
-					NotaId = nota.Id,
-					baixa.mensagem,
-					StatusCode = baixa.statusCode
-				})
-			});
+					Tipo = "FalhaBaixaEstoque",
+					Payload = JsonSerializer.Serialize(new
+					{
+						NotaId = nota.Id,
+						baixa.mensagem,
+						StatusCode = baixa.statusCode
+					})
+				});
+
+				await dbContext.SaveChangesAsync(cancellationToken);
+				return StatusCode(StatusCodes.Status503ServiceUnavailable,
+						new { mensagem = baixa.mensagem ?? "Falha ao comunicar com estoque. Tente novamente." });
+			}
+
+			return StatusCode(statusCode,
+					new { mensagem = baixa.mensagem ?? "Falha ao baixar estoque." });
 
 			await dbContext.SaveChangesAsync(cancellationToken);
 			return StatusCode(StatusCodes.Status503ServiceUnavailable,

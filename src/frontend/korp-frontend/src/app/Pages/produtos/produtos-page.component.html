@@ -30,14 +30,13 @@
 				<th class="col-action">Ações</th>
 			</tr>
 		</thead>
-		@if(listagemCarregando()){
-		<tr>
-			<td colspan="5" class="text-center">Carregando...</td>
-		</tr>
-		} @else {
-
 		<tbody>
-			@for (produto of produtos(); track $index) {
+			@if(listagemCarregando()){
+			<tr>
+				<td colspan="5" class="text-center">Carregando...</td>
+			</tr>
+			} @else {
+			@for (produto of produtos(); track produto.id) {
 			<tr>
 				<td [style.width.px]="100">{{ produto.codigo }}</td>
 				<td>{{ produto.descricao }}</td>
@@ -61,12 +60,12 @@
 				</td>
 			</tr>
 			}
+			}
 		</tbody>
 		<tfoot>
 			<tr>
 				<td colspan="5" class="text-right">Total de produtos: {{ produtos().length }}</td>
 			</tr>
 		</tfoot>
-		}
 	</table>
 </section>

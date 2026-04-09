@@ -22,8 +22,7 @@ export class BotaoClaroEscuro implements OnInit {
     }
   }
 
-  setlightDark() {
-    // UPDATE
+  setLightDark() {
     if (this.lightness() === 'light') {
       this.ui.lightness.set('dark');
       document.querySelector("html")?.classList.add('dark-theme');

@@ -21,9 +21,10 @@ export class BotaoCorTema implements OnInit {
     document.querySelector("html")?.style.setProperty('--sys-h-cor', hue);
   }
 
-  setColor(event: any) {
-    const color = event.target.value;
+  setColor(event: Event) {
+    const color = (event.target as HTMLInputElement).value;
     const hueNumber = this.getHueFromHex(color);
+    this.ui.hue.set(hueNumber);
     document.documentElement.style.setProperty('--sys-h-cor', hueNumber.toString());
     sessionStorage.setItem('theme-color', hueNumber.toString());
   }
