@@ -22,9 +22,11 @@ export class RotaNotaFiscal {
   notas = signal<NotaFiscal[]>([]);
   itensNovaNota = signal<ItemNotaInput[]>([]);
 
-  produtoSelecionadoId = signal<number | null>(null);
-  quantidade = signal<number>(1);
-  erro = signal<string>('');
+  produtoInputId = signal<number | null>(null);
+  quantidadeInput = signal<number>(1);
+  erroInclusaoProduto = signal<string>('');
+
+  erroGeracaoNota = signal<string>('');
   imprimindoId = signal<number | null>(null);
 
   ngOnInit(): void {
@@ -37,22 +39,46 @@ export class RotaNotaFiscal {
   }
 
   adicionarItem(): void {
-    if (this.produtoSelecionadoId() == null || this.quantidade() <= 0) return;
+    if (this.produtoInputId() == null || this.quantidadeInput() <= 0) return;
 
-    const produto = this.produtos().find((p) => p.id === this.produtoSelecionadoId());
+    const produto = this.produtos().find((p) => p.id === this.produtoInputId());
     if (!produto) return;
 
+    // Verificamos o estoque considerando a quantidade já presente na nota para o mesmo produto, somada à nova quantidade que o usuário deseja adicionar.
+    const quantidadeTotal = this.itensNovaNota().reduce((total, item) => {
+      return item.produtoId === produto.id ? total + item.quantidade : total;
+    }, 0) + this.quantidadeInput();
+    if (produto.saldo < quantidadeTotal) {
+      this.erroInclusaoProduto.set(`Produto "${produto.descricao}" com estoque insuficiente. Disponível: ${produto.saldo}.`);
+      return;
+    }
+
+    // Primeiro adicionamos o item normalmente, mesmo que já exista um item do mesmo produto.
     this.itensNovaNota.update((itens) => [
       ...itens,
       {
         produtoId: produto.id,
         descricaoProduto: produto.descricao,
-        quantidade: this.quantidade(),
+        quantidade: this.quantidadeInput(),
       }
     ]);
 
-    this.produtoSelecionadoId.set(null);
-    this.quantidade.set(1);
+    // Após o update, unificamos produtos com mesmo ID para evitar múltiplas linhas do mesmo produto na nota.
+    this.itensNovaNota.update((itens) => {
+      const itensMap = new Map<number, ItemNotaInput>();
+      for (const item of itens) {
+        if (itensMap.has(item.produtoId)) {
+          const existente = itensMap.get(item.produtoId)!;
+          existente.quantidade += item.quantidade;
+        } else {
+          itensMap.set(item.produtoId, { ...item });
+        }
+      }
+      return Array.from(itensMap.values());
+    });
+
+    this.produtoInputId.set(null);
+    this.quantidadeInput.set(1);
   }
 
   removerItem(item: ItemNotaInput): void {
@@ -66,8 +92,8 @@ export class RotaNotaFiscal {
     });
   }
 
-  criarNota(): void {
-    this.erro.set('');
+  gerarNota(): void {
+    this.erroGeracaoNota.set('');
     this.notasApi.criar({ itens: this.itensNovaNota() })
       .pipe(takeUntil(this.subs))
       .subscribe({
@@ -76,13 +102,13 @@ export class RotaNotaFiscal {
           this.carregarNotas();
         },
         error: (err) => {
-          this.erro.set(err?.error?.title ?? err?.error ?? 'Falha ao criar nota fiscal.');
+          this.erroGeracaoNota.set(err?.error?.title ?? err?.error ?? 'Falha ao criar nota fiscal.');
         }
       });
   }
 
   imprimir(notaId: number): void {
-    this.erro.set('');
+    this.erroGeracaoNota.set('');
     this.imprimindoId.set(notaId);
     // A geração da UUID está sendo feita aqui no frontend para garantir a idempotência da requisição, evitando impressões duplicadas caso o usuário clique mais de uma vez ou haja instabilidade na rede.
     const idempotencyKey = crypto.randomUUID();
@@ -94,7 +120,7 @@ export class RotaNotaFiscal {
         this.carregarProdutos();
       },
       error: (err) => {
-        this.erro.set(err?.error?.mensagem ?? err?.error?.title ?? 'Falha ao imprimir nota fiscal.');
+        this.erroGeracaoNota.set(err?.error?.mensagem ?? err?.error?.title ?? 'Falha ao imprimir nota fiscal.');
       },
       complete: () => {
         this.imprimindoId.set(null);
@@ -105,14 +131,14 @@ export class RotaNotaFiscal {
   private carregarProdutos(): void {
     this.produtosApi.listar().pipe(takeUntil(this.subs)).subscribe({
       next: (dados) => this.produtos.set(dados),
-      error: () => this.erro.set('Falha ao carregar produtos.')
+      error: () => this.erroGeracaoNota.set('Falha ao carregar produtos.')
     });
   }
 
   private carregarNotas(): void {
     this.notasApi.listar().pipe(takeUntil(this.subs)).subscribe({
       next: (dados) => this.notas.set(dados),
-      error: () => this.erro.set('Falha ao carregar notas fiscais.')
+      error: () => this.erroGeracaoNota.set('Falha ao carregar notas fiscais.')
     });
   }
 

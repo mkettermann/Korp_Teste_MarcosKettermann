@@ -8,14 +8,18 @@
 		</div>
 	</div>
 	<hr>
+	@if(produtos().length === 0) {
+	<p class="text-danger">
+		Nenhum produto cadastrado. Cadastre produtos para gerar notas fiscais.
+	</p>
+	} @else {
 	<div class="gerar-notas-container">
 		<div class="gerar-notas-itens">
 			<h3>Inclusão de Produtos</h3>
 			<form class="grid" (ngSubmit)="adicionarItem()">
 				<label>
 					Produto *
-					<select name="produto" (ngModelChange)="produtoSelecionadoId.set($event)" [ngModel]="produtoSelecionadoId()"
-						required>
+					<select name="produto" (ngModelChange)="produtoInputId.set($event)" [ngModel]="produtoInputId()" required>
 						<option [ngValue]="null">Selecione...</option>
 						@for (produto of produtos(); track $index) {
 						<option [ngValue]="produto.id">
@@ -26,14 +30,17 @@
 				</label>
 				<label>
 					Quantidade *
-					<input name="quantidade" (ngModelChange)="quantidade.set($event)" [ngModel]="quantidade()" type="number"
-						min="1" required />
+					<input name="quantidade" (ngModelChange)="quantidadeInput.set($event)" [ngModel]="quantidadeInput()"
+						type="number" min="1" required />
 				</label>
-				<button type="submit" [disabled]="produtoSelecionadoId() == null || quantidade() <= 0">
+				<button type="submit" [disabled]="produtoInputId() == null || quantidadeInput() <= 0">
 					<i class="bi bi-plus-circle"></i>
 					Acrescentar Produto à Nota
 				</button>
 			</form>
+			@if (erroInclusaoProduto()) {
+			<p class="text-danger">{{ erroInclusaoProduto() }}</p>
+			}
 
 			<table>
 				<thead>
@@ -60,7 +67,7 @@
 			</table>
 		</div>
 		<div class="gerar-notas-execucao">
-			<button [disabled]="itensNovaNota().length === 0" (click)="criarNota()" class="gerar-notas-botao">
+			<button [disabled]="itensNovaNota().length === 0" (click)="gerarNota()" class="gerar-notas-botao">
 				<div class="gerar-notas-botao-icone">
 					<i class="bi bi-receipt"></i>
 				</div>
@@ -69,11 +76,12 @@
 					Gerar Nota Fiscal
 				</div>
 			</button>
-			@if (!erro()) {
-			<p class="gerar-notas-erro text-danger">{{ erro() }}</p>
+			@if (erroGeracaoNota()) {
+			<p class="gerar-notas-erro text-danger">{{ erroGeracaoNota() }}</p>
 			}
 		</div>
 	</div>
+	}
 </section>
 
 <section class="panel">
@@ -81,20 +89,24 @@
 	<table>
 		<thead>
 			<tr>
-				<th>Número</th>
-				<th>Status</th>
-				<th>Itens</th>
-				<th>Ações</th>
+				<th class="col-num-sequencia">Número</th>
+				<th>Produtos</th>
+				<th class="col-status">Status</th>
+				<th class="col-action">Ações</th>
 			</tr>
 		</thead>
 		<tbody>
 			@for (nota of notas(); track $index) {
 			<tr>
-				<td>{{ nota.numeroSequencial }}</td>
-				<td>{{ nota.status }}</td>
+				<td class="col-num-sequencia">{{ nota.numeroSequencial }}</td>
 				<td>{{ nota.itens.length }}</td>
-				<td>
-					<button [disabled]="nota.status !== 'Aberta' || imprimindoId() === nota.id" (click)="imprimir(nota.id)">
+				<td class="col-status">
+					{{ nota.status === 1 ? 'Aberta' : 'Fechada' }}
+				</td>
+				<td class="col-action">
+					<button [disabled]="nota.status !== 1 || imprimindoId() === nota.id" (click)="imprimir(nota.id)"
+						[style.width]="'100%'">
+						<i class="bi bi-printer"></i>
 						{{ imprimindoId() === nota.id ? 'Processando...' : 'Imprimir' }}
 					</button>
 				</td>
@@ -102,4 +114,19 @@
 			}
 		</tbody>
 	</table>
+	@if (erroGeracaoNota()) {
+	<p class="text-danger text-right">{{ erroGeracaoNota() }}</p>
+	}
+	<div>
+		<ul>
+			<li>
+				<i class="bi bi-circle-fill text-success f-s-5"></i>
+				Aberta
+			</li>
+			<li>
+				<i class="bi bi-circle-fill text-danger f-s-5"></i>
+				Fechada
+			</li>
+		</ul>
+	</div>
 </section>
