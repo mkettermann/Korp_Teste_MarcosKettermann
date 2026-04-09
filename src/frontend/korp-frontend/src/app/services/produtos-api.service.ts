@@ -11,7 +11,8 @@ export class ProdutosApiService extends BaseApiService {
 	modificandoProduto = signal<Produto | null>(null);
 
 	listar(ativo?: boolean): Observable<Produto[]> {
-		return this.get<Produto>(`produtos${ativo ? '?ativo=true' : ''}`);
+		const query = ativo !== undefined ? `?ativo=${ativo}` : '';
+		return this.get<Produto>(`produtos${query}`);
 	}
 
 	criar(payload: { codigo: string; descricao: string; saldo: number }): Observable<Produto> {

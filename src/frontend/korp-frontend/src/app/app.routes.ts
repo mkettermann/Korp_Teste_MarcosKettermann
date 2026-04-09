@@ -16,13 +16,5 @@ export const routes: Routes = [
 			{ path: 'excluir/:id', component: ProdutosExcluir },
 		],
 	},
-	{
-		path: 'notas',
-		component: RotaNotaFiscal,
-		children: [
-			// { path: 'novo', component: NotaFiscalNovo },
-			// { path: 'editar/:id', component: NotaFiscalEditar },
-			// { path: 'excluir/:id', component: NotaFiscalExcluir },
-		],
-	}
+	{ path: 'notas', component: RotaNotaFiscal },
 ];

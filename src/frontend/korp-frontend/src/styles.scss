@@ -140,7 +140,6 @@ button:disabled {
 button:focus {
 	outline: 2px solid var(--sys-primary) !important;
 	outline-offset: 2px;
-	z-index: 2;
 }
 
 table {

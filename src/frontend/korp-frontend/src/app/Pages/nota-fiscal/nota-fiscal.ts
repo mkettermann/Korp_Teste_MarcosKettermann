@@ -117,8 +117,6 @@ export class RotaNotaFiscal {
     this.erroGeracaoNota.set('');
     this.imprimindoId.update((ids) => [...ids, notaId]);
 
-    await Ui.wait(2500);
-
     // A geração da UUID está sendo feita aqui no frontend para garantir a idempotência da requisição, evitando impressões duplicadas caso o usuário clique mais de uma vez ou haja instabilidade na rede.
     const idempotencyKey = crypto.randomUUID();
 

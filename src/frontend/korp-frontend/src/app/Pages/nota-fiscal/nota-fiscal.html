@@ -64,7 +64,7 @@
 						<td>{{ item.descricaoProduto }}</td>
 						<td>{{ item.quantidade }}</td>
 						<td class="col-action">
-							<a (click)="removerItem(item)" class="text-danger cursor-pointer">
+							<a role="button" tabindex="0" (click)="removerItem(item)" class="text-danger cursor-pointer">
 								<i class="bi bi-trash"></i>
 								Remover Produto
 							</a>

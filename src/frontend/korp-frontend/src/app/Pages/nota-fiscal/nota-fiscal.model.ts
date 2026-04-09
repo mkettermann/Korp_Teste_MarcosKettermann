@@ -24,7 +24,7 @@ export interface NotaFiscalCriarItem {
 export interface ImpressaoNotaResponse {
 	notaFiscalId: number;
 	numero: number;
-	status: NotaStatus;
+	status: string;
 	pdfBase64: string;
 }
 

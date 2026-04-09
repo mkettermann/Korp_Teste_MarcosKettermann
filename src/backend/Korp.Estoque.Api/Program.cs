@@ -65,7 +65,7 @@ app.UseExceptionHandler(errorApp =>
     });
 });
 
-//Não altere a ordem. Fronend é Angular e depende de CORS para funcionar.
+//Não altere a ordem. Frontend é Angular e depende de CORS para funcionar.
 app.UseCors("frontend");
 app.UseHttpsRedirection();
 
