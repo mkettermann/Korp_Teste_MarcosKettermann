@@ -1,11 +1,23 @@
 <section class="panel">
-	<h2>Cadastro de Nota Fiscal</h2>
+	<div class="panel-title">
+		<div class="panel-text">
+			Nota Fiscal
+		</div>
+		<div class="actions">
+			<a routerLink="/notas/novo" routerLinkActive="active">
+				<i class="bi bi-plus"></i>
+				Novo
+			</a>
+			<i class="bi bi-receipt"></i>
+		</div>
+	</div>
+
 	<form class="grid" (ngSubmit)="adicionarItem()">
 		<label>
 			Produto
 			<select name="produto" [(ngModel)]="produtoSelecionadoId" required>
 				<option [ngValue]="null">Selecione...</option>
-				@for (produto of produtos; track $index) {
+				@for (produto of produtos(); track $index) {
 				<option [ngValue]="produto.id">{{ produto.codigo }} - {{ produto.descricao }} (saldo {{ produto.saldo }})
 				</option>
 				}
@@ -17,6 +29,7 @@
 		</label>
 		<button type="submit">Adicionar item</button>
 	</form>
+	<router-outlet></router-outlet>
 
 	<table>
 		<thead>
@@ -26,7 +39,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			@for (item of itensNovaNota; track $index; let indexDoItem = $index) {
+			@for (item of itensNovaNota(); track $index; let indexDoItem = $index) {
 			<tr>
 				<td>{{ item.descricaoProduto }}</td>
 				<td>{{ item.quantidade }}</td>
@@ -38,7 +51,7 @@
 		</tbody>
 	</table>
 
-	<button [disabled]="itensNovaNota.length === 0" (click)="criarNota()">
+	<button [disabled]="itensNovaNota().length === 0" (click)="criarNota()">
 		Criar Nota (status Aberta)
 	</button>
 	@if (erro) {
@@ -58,7 +71,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			@for (nota of notas; track $index) {
+			@for (nota of notas(); track $index) {
 			<tr>
 				<td>{{ nota.numeroSequencial }}</td>
 				<td>{{ nota.status }}</td>

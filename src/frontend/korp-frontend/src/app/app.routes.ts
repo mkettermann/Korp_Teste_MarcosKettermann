@@ -1,9 +1,12 @@
 import { Routes } from '@angular/router';
-import { NotasPageComponent } from './Pages/notas/notas-page.component';
 import { ProdutosPageComponent } from './Pages/produtos/produtos-page.component';
 import { ProdutosEditar } from './Pages/produtos/produtos-editar/produtos-editar';
 import { ProdutosNovo } from './Pages/produtos/produtos-novo/produtos-novo';
 import { ProdutosExcluir } from './Pages/produtos/produtos-excluir/produtos-excluir';
+import { RotaNotaFiscal } from './Pages/nota-fiscal/nota-fiscal';
+import { NotaFiscalNovo } from './Pages/nota-fiscal/nota-fiscal-novo/nota-fiscal-novo';
+import { NotaFiscalEditar } from './Pages/nota-fiscal/nota-fiscal-editar/nota-fiscal-editar';
+import { NotaFiscalExcluir } from './Pages/nota-fiscal/nota-fiscal-excluir/nota-fiscal-excluir';
 
 export const routes: Routes = [
 	{ path: '', pathMatch: 'full', redirectTo: 'produtos' },
@@ -16,5 +19,13 @@ export const routes: Routes = [
 			{ path: 'excluir/:id', component: ProdutosExcluir },
 		],
 	},
-	{ path: 'notas', component: NotasPageComponent }
+	{
+		path: 'notas',
+		component: RotaNotaFiscal,
+		children: [
+			{ path: 'novo', component: NotaFiscalNovo },
+			{ path: 'editar/:id', component: NotaFiscalEditar },
+			{ path: 'excluir/:id', component: NotaFiscalExcluir },
+		],
+	}
 ];

@@ -5,6 +5,7 @@ import { BaseApiService } from './base/base-api.service';
 
 @Injectable({ providedIn: 'root' })
 export class ProdutosApiService extends BaseApiService {
+	portaApi = '5101';
 
 	public controleReloadListagem = signal(false);
 	modificandoProduto = signal<Produto | null>(null);

@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ImpressaoNotaResponse, NotaFiscal, NotaFiscalCriarItem } from '../Pages/notas/notas-model';
 import { BaseApiService } from './base/base-api.service';
 import { HttpHeaders } from '@angular/common/http';
+import { ImpressaoNotaResponse, NotaFiscal, NotaFiscalCriarItem } from '../Pages/nota-fiscal/nota-fiscal.model';
 
 @Injectable({ providedIn: 'root' })
 export class NotasApiService extends BaseApiService {
+	portaApi = '5102';
 
 	listar(): Observable<NotaFiscal[]> {
 		return this.get<NotaFiscal>('notas');
