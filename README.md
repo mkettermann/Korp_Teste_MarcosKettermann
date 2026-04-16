@@ -1,4 +1,4 @@
-# Korp_Teste_MarcosKettermann
+# Sistema de Microservicos entre Estoque, Faturamento e Frontend
 
 Monorepo com frontend Angular e backend .NET para gerenciamento de produtos e emissao/impressao de notas fiscais em arquitetura de microsservicos.
 
